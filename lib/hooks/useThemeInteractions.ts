@@ -42,7 +42,7 @@ function writeLocal(likes: Set<string>, bookmarks: Set<string>) {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({ likes: [...likes], bookmarks: [...bookmarks] }));
   } catch {
-    // storage full / unavailable — non-fatal
+    // storage full / unavailable, non-fatal
   }
 }
 
@@ -65,7 +65,7 @@ export const useInteractionStore = create<InteractionStore>((set, get) => ({
   hydrate: (userId) => {
     const cur = get();
 
-    // 1. Seed from localStorage exactly once — this is independent of userId, so it must
+    // 1. Seed from localStorage exactly once, this is independent of userId, so it must
     //    not re-run (and must not create fresh Sets) on every call.
     if (!cur.hydrated) {
       const local = readLocal();
@@ -119,7 +119,7 @@ export function useHydrateInteractions() {
   const hydrate = useInteractionStore((s) => s.hydrate);
 
   // hydrate() is idempotent and self-guarding, so the effect only needs to depend on the
-  // resolved userId (and the stable action). Do NOT depend on reactive store values here —
+  // resolved userId (and the stable action). Do NOT depend on reactive store values here,
   // that's what let concurrent card instances thrash store.userId in an infinite loop.
   useEffect(() => {
     hydrate(userId);

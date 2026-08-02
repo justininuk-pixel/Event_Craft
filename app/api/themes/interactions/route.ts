@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/db/client";
 
 // Theme like/bookmark/view interactions. Backed by the `theme_interactions` table, but degrades
-// gracefully (empty reads / no-op writes) when the migration hasn't been run yet — the client
+// gracefully (empty reads / no-op writes) when the migration hasn't been run yet, the client
 // keeps a localStorage mirror so the feature works regardless.
 const VALID_TYPES = ["like", "bookmark", "view"] as const;
 type InteractionType = (typeof VALID_TYPES)[number];
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ ok: true });
   } catch {
-    // Table missing or other error — the client's localStorage mirror still holds state.
+    // Table missing or other error, the client's localStorage mirror still holds state.
     return NextResponse.json({ ok: false, degraded: true });
   }
 }

@@ -702,7 +702,7 @@ export function ThemeRenderer({
                 if (currentSrc.startsWith('draw:')) return;
                 const toastId = toast.info("Removing background using AI...");
                 try {
-                  // Loaded on demand — this ML model is ~50MB and must never be in the page bundle.
+                  // Loaded on demand, this ML model is ~50MB and must never be in the page bundle.
                   const { removeBackground } = await import("@imgly/background-removal");
                   const blob = await removeBackground(currentSrc);
                   const reader = new FileReader();
@@ -1417,7 +1417,7 @@ export function ThemeRenderer({
                   onUpdate={(updates, isFinal) => {
                     const store = useEditorStore.getState();
                     // NOTE: TransformableSticker streams moves locally and only reports the FINAL
-                    // transform at pointer-up (isFinal=true). We must APPLY that final transform —
+                    // transform at pointer-up (isFinal=true). We must APPLY that final transform,
                     // the old early-return here threw it away, so dragged stickers snapped back.
                     const newStickers = [...(store.config.stickers || [])];
                     const target = newStickers[idx];

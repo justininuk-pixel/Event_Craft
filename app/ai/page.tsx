@@ -198,7 +198,7 @@ function NotConfiguredCard() {
           </h3>
           <p className="text-xs text-emerald-700/80 dark:text-emerald-400/80 leading-relaxed">
             Set up <strong>Google Gemini AI Studio</strong> for a generous free daily quota, or run{" "}
-            <strong>Ollama / LM Studio</strong> locally with small 2B–4B models — completely free and fully private.
+            <strong>Ollama / LM Studio</strong> locally with small 2B–4B models, completely free and fully private.
           </p>
         </div>
 

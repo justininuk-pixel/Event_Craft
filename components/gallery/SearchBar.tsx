@@ -70,7 +70,7 @@ export function SearchBar({
     });
   };
 
-  // Perform search when debouncedQuery or themes changes — in an effect, not a memo,
+  // Perform search when debouncedQuery or themes changes, in an effect, not a memo,
   // so we never call the parent's state setter during render (React rules violation).
   const [searchResultsCount, setSearchResultsCount] = useState(themes.length);
 

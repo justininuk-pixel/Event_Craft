@@ -377,7 +377,7 @@ export function EditorLayout({ theme }: EditorLayoutProps) {
         if (data.card.title) updateField("title", data.card.title);
         if (data.card.subtitle) updateField("subtitle", data.card.subtitle);
         if (data.card.body) updateField("body", data.card.body);
-        toast.success("Card personalised — title, subtitle and message updated!");
+        toast.success("Card personalised, title, subtitle and message updated!");
       } else {
         updateField(aiTargetField, data.text);
         toast.success(`Content applied to ${aiTargetField}!`);
@@ -511,7 +511,7 @@ export function EditorLayout({ theme }: EditorLayoutProps) {
     }
   };
 
-  // Shared tool panels (Themes/Elements/Layers/Media/Stickers/Audio/AI) — rendered in the
+  // Shared tool panels (Themes/Elements/Layers/Media/Stickers/Audio/AI), rendered in the
   // desktop left sidebar AND inside the mobile bottom sheet, so phones can use them too.
   const renderToolPanel = (tab: string) => (
     <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin">
@@ -741,7 +741,7 @@ export function EditorLayout({ theme }: EditorLayoutProps) {
                   </div>
                 )}
 
-                {/* Inline AI provider config — change the AI without leaving the editor */}
+                {/* Inline AI provider config, change the AI without leaving the editor */}
                 <details className="rounded-lg border border-border bg-card/50 group" open={!aiSettings.isConfigured()}>
                   <summary className="cursor-pointer list-none px-2.5 py-2 text-[11px] font-bold text-foreground flex items-center justify-between">
                     <span className="flex items-center gap-1.5"><Bot className="w-3.5 h-3.5" /> AI Provider</span>
@@ -1152,7 +1152,7 @@ export function EditorLayout({ theme }: EditorLayoutProps) {
       {/* Main Workspace */}
       <div className="flex-1 flex min-h-0 relative">
         
-        {/* Left Sidebar (Canva Style) — desktop only */}
+        {/* Left Sidebar (Canva Style), desktop only */}
         <div className="hidden md:flex w-20 shrink-0 bg-background border-r border-border flex-col items-center py-4 gap-4 z-20">
           {[
             { id: "themes", icon: <Palette className="w-6 h-6" />, label: "Themes" },
@@ -1287,13 +1287,13 @@ export function EditorLayout({ theme }: EditorLayoutProps) {
           </div>
         </div>
 
-        {/* Right Sidebar (Properties Panel) — desktop */}
+        {/* Right Sidebar (Properties Panel), desktop */}
         <div className="hidden md:block md:w-80 lg:w-96 shrink-0 bg-background border-l border-border">
           <EditorSidebar theme={theme} />
         </div>
       </div>
 
-      {/* Mobile editor controls — bottom sheet */}
+      {/* Mobile editor controls, bottom sheet */}
       <div className="md:hidden">
           {mobileSheetOpen && (
             <div

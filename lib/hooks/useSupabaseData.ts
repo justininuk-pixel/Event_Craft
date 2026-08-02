@@ -167,7 +167,7 @@ export function useAnalyticsSummary() {
     if (!userId) return;
     try {
       setLoading(true);
-      // Always pull fresh stats — a cached snapshot made the analytics look like it "wasn't
+      // Always pull fresh stats, a cached snapshot made the analytics look like it "wasn't
       // updating" after new views/reactions/cards.
       const summary = await fetchWithCache(`/api/cards/analytics?userId=${userId}`, true);
       setData(summary);

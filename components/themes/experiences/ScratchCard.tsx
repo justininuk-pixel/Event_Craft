@@ -152,7 +152,7 @@ export function ScratchCard({ theme, config, mode, palette, tone, onComplete }: 
           </p>
           {config.sender && !compact && (
             <p className="text-xs mt-2 font-semibold" style={{ color: "var(--exp-accent)" }}>
-              — {config.sender}
+             , {config.sender}
             </p>
           )}
         </div>

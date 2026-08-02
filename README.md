@@ -1,4 +1,4 @@
-# Event Craft 🎈
+# Event Craft
 
 > **Interactive digital card & mini-app platform powered by Next.js 16, React 19, and Tailwind CSS.**
 
@@ -8,7 +8,7 @@ Event Craft lets you create, customize, and send engaging digital greeting cards
 
 ---
 
-## ✨ Features
+## Features
 
 - **500+ Mini-Apps & Themes**: From funny interactive date requests to memory timelines, digital scratch-offs, and puzzle reveals.
 - **Dynamic Visual Engines**: Particle systems (stars, sakura, rose petals), confetti cannons, 3D tilt cards, mesh gradients, and glitch overlays.
@@ -19,7 +19,7 @@ Event Craft lets you create, customize, and send engaging digital greeting cards
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -53,7 +53,7 @@ Event Craft lets you create, customize, and send engaging digital greeting cards
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Event_Craft/
@@ -74,12 +74,12 @@ Event_Craft/
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 For detailed information about the mini-app architecture, visual engines, and design vision, see [ABOUT.md](./ABOUT.md).
 
 ---
 
-## 📜 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License, see the [LICENSE](LICENSE) file for details.

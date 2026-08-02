@@ -30,12 +30,12 @@ export function CRTChannelSurfer({
         id: m.id || `ch${i}`,
         label: `CH ${channelNumbers[i % channelNumbers.length]}`,
         videoSrc: "",
-        caption: [m.date, m.title, m.body].filter(Boolean).join(" — "),
+        caption: [m.date, m.title, m.body].filter(Boolean).join(", "),
       }))
     : [
         { id: "ch1", label: "CH 03", videoSrc: "", caption: config.title || theme.content.title || "A special broadcast" },
         { id: "ch2", label: "CH 07", videoSrc: "", caption: config.body || theme.content.body || "Someone has something to tell you." },
-        { id: "ch3", label: "CH 12", videoSrc: "", caption: config.recipient ? `This broadcast is dedicated to ${config.recipient}.` : "Add your own moments in the editor's Experience panel — each becomes a channel." },
+        { id: "ch3", label: "CH 12", videoSrc: "", caption: config.recipient ? `This broadcast is dedicated to ${config.recipient}.` : "Add your own moments in the editor's Experience panel, each becomes a channel." },
       ];
 
   const [currentChannel, setCurrentChannel] = useState(0);
@@ -137,7 +137,7 @@ export function CRTChannelSurfer({
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-slate-900 via-slate-800 to-black"
               >
-                {/* Placeholder for video — show the memory text */}
+                {/* Placeholder for video, show the memory text */}
                 <div className="text-6xl mb-4 opacity-30">📼</div>
                 <p className="text-white/90 text-sm leading-relaxed max-w-[250px] font-sans">
                   {activeChannel.caption}

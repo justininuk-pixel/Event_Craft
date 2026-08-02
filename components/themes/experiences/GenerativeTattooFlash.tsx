@@ -67,7 +67,7 @@ export function GenerativeTattooFlash({
           <div className="space-y-3">
             <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight leading-none">Design their flash</h1>
             <p className="text-sm font-sans text-[#2c2c2c]/70 leading-relaxed">
-              Type up to three things that remind you of them — a word, a symbol, an inside joke. We&apos;ll
+              Type up to three things that remind you of them, a word, a symbol, an inside joke. We&apos;ll
               ink them onto a classic vintage flash sheet.
             </p>
           </div>

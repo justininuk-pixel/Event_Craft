@@ -5,7 +5,7 @@ import { supabase } from "@/lib/db/client";
 
 // Netflix-style recommendation rows for the home page. Reads the user's interactions (gracefully
 // empty if the table is missing) and scores the catalog server-side, so the client only receives
-// the handful of themes it shows — never the full 1.3MB catalog.
+// the handful of themes it shows, never the full 1.3MB catalog.
 async function getInteractions(userId: string | null): Promise<UserInteractions> {
   if (!userId) return EMPTY_INTERACTIONS;
   try {

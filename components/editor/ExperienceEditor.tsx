@@ -206,7 +206,7 @@ function LayersEditor({ exp, patch }: PartProps) {
 
   return (
     <div className="space-y-3">
-      <Hint>Each layer is peeled in order — the message gets deeper as they go. End with the big one.</Hint>
+      <Hint>Each layer is peeled in order, the message gets deeper as they go. End with the big one.</Hint>
       {layers.map((l, i) => (
         <ListRow
           key={l.id}
@@ -399,7 +399,7 @@ function StoryEditor({ exp, patch }: PartProps) {
 function ScratchEditor({ exp, patch }: PartProps) {
   return (
     <div className="space-y-3">
-      <Hint>The message (in Personalisation) is hidden under foil — they scratch to reveal it.</Hint>
+      <Hint>The message (in Personalisation) is hidden under foil, they scratch to reveal it.</Hint>
       <Input
         label="Scratch prompt"
         value={exp.scratchHint ?? ""}
@@ -566,7 +566,7 @@ function WaitTimeEditor({ exp, patch }: PartProps) {
   return (
     <div className="space-y-3">
       <Hint>
-        How long must the recipient wait patiently — without touching the screen or leaving — before
+        How long must the recipient wait patiently, without touching the screen or leaving, before
         the message unlocks? The editor preview always uses a short 10-second timer for testing.
       </Hint>
       <Slider
@@ -675,7 +675,7 @@ function AdvancedJsonEditor({ exp, patch, experienceId }: PartProps & { experien
       </summary>
       <div className="px-3 pb-3 space-y-2">
         <Hint>
-          {template?.desc ?? "Every option this experience supports lives here. Edit the values and press Apply — the preview updates instantly. Most themes use an `items` list."}
+          {template?.desc ?? "Every option this experience supports lives here. Edit the values and press Apply, the preview updates instantly. Most themes use an `items` list."}
         </Hint>
 
         {currentKeys.length > 0 && (
@@ -732,7 +732,7 @@ function AdvancedJsonEditor({ exp, patch, experienceId }: PartProps & { experien
 }
 
 /**
- * Universal "how the ending looks" panel — colour/size/background/alignment of the reveal message.
+ * Universal "how the ending looks" panel, colour/size/background/alignment of the reveal message.
  * Stored on config.experience.reveal; experiences read it via lib/themes/revealStyle.ts.
  */
 function RevealStyleEditor({ exp, patch }: PartProps) {
@@ -833,8 +833,8 @@ export const ExperienceEditor = React.memo(function ExperienceEditor({ theme }: 
             onChange={(e) => patch({ unlockDate: fromLocalInput(e.target.value) })}
           />
           <Hint>
-            The card rewinds the years from today back to this date — their birthday, your
-            anniversary, the day you met — then shows what the world was like back then plus
+            The card rewinds the years from today back to this date, their birthday, your
+            anniversary, the day you met, then shows what the world was like back then plus
             your message.
           </Hint>
         </div>

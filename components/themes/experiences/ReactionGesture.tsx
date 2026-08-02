@@ -144,7 +144,7 @@ export function ReactionGesture({ theme, config, mode, palette, tone, onComplete
           )}
           {config.sender && !compact && (
             <p className="text-xs mt-3 font-semibold" style={{ color: "var(--exp-accent)" }}>
-              — {config.sender}
+             , {config.sender}
             </p>
           )}
         </motion.div>

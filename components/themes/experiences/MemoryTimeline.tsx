@@ -226,7 +226,7 @@ export function MemoryTimeline({ theme, config, mode, palette, tone, onComplete 
             </p>
             {config.sender && (
               <p className="text-xs mt-2 font-semibold" style={{ color: "var(--exp-accent)" }}>
-                — {config.sender}
+               , {config.sender}
               </p>
             )}
           </motion.div>

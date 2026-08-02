@@ -53,7 +53,7 @@ export function DashboardWidgets() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
       {/* Main Column (2/3 width) */}
       <div className="lg:col-span-2 space-y-8">
-        {/* Personalized theme rails — a few curated picks per row, scroll for more */}
+        {/* Personalized theme rails, a few curated picks per row, scroll for more */}
         <section className="space-y-8">
           {rowsLoading ? (
             Array.from({ length: 2 }).map((_, rowIdx) => (

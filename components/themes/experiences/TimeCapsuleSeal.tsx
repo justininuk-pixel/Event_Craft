@@ -100,14 +100,14 @@ export function TimeCapsuleSeal({
             >
               <div className="flex justify-between items-center mb-3">
                 <span className="font-bold text-xs text-zinc-400 uppercase tracking-widest">
-                  {allKeysTurned ? "All keys turned — seal it" : "Turn every key to arm the seal"}
+                  {allKeysTurned ? "All keys turned, seal it" : "Turn every key to arm the seal"}
                 </span>
                 <span className="font-black text-lg text-white bg-zinc-800 px-3 py-0.5 rounded-full border border-zinc-700">
                   {keysTurned}/{totalKeys}
                 </span>
               </div>
 
-              {/* The five keys — the recipient turns them */}
+              {/* The five keys, the recipient turns them */}
               <div className="flex justify-between gap-2 mb-5">
                 {Array.from({ length: totalKeys }).map((_, i) => {
                   const turned = i < keysTurned;
@@ -196,7 +196,7 @@ export function TimeCapsuleSeal({
 
             <h2 className="text-2xl font-bold uppercase tracking-widest text-zinc-400 mb-4">Capsule Sealed</h2>
             <p className="text-zinc-400 max-w-sm mb-10 leading-relaxed">
-              {`"${title}" is safely locked inside — these memories are kept exactly as they are today.`}
+              {`"${title}" is safely locked inside, these memories are kept exactly as they are today.`}
             </p>
 
             <div className="w-full max-w-sm border border-zinc-800 bg-zinc-900 rounded-2xl p-6 shadow-2xl">
@@ -209,7 +209,7 @@ export function TimeCapsuleSeal({
                 </>
               ) : (
                 <p className="text-sm text-zinc-500 leading-relaxed">
-                  Come back to this link whenever the moment feels right — the capsule will be waiting.
+                  Come back to this link whenever the moment feels right, the capsule will be waiting.
                 </p>
               )}
             </div>

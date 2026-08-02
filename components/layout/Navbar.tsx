@@ -209,7 +209,7 @@ export function Navbar() {
   ];
 
   // Reserve space for the fixed mobile bottom nav (only on pages that render the
-  // Navbar — the editor and card viewer don't, so they stay full-bleed).
+  // Navbar, the editor and card viewer don't, so they stay full-bleed).
   useEffect(() => {
     document.body.classList.add("has-bottom-nav");
     return () => document.body.classList.remove("has-bottom-nav");

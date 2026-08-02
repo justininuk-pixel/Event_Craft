@@ -38,7 +38,7 @@ export function MessageAffordance({
 
   return (
     <div className="absolute inset-0 z-[60] pointer-events-none">
-      {/* Trigger — bottom-right, out of the way of most game controls */}
+      {/* Trigger, bottom-right, out of the way of most game controls */}
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -102,7 +102,7 @@ export function MessageAffordance({
               )}
               {sender && (
                 <p className="text-sm font-semibold mt-4" style={{ color: primary }}>
-                  — {sender}
+                 , {sender}
                 </p>
               )}
             </motion.div>

@@ -35,7 +35,7 @@ export function WishJar({ theme, config, mode, palette, contributions = [] }: Ex
         </h1>
         {!compact && (
           <p className="text-xs mt-1" style={{ color: "var(--exp-text-secondary)" }}>
-            {wishes.length > 0 ? `${wishes.length} ${wishes.length === 1 ? "wish" : "wishes"} — tap one to read` : config.subtitle || "Drop a wish in the jar"}
+            {wishes.length > 0 ? `${wishes.length} ${wishes.length === 1 ? "wish" : "wishes"}, tap one to read` : config.subtitle || "Drop a wish in the jar"}
           </p>
         )}
       </header>
@@ -82,7 +82,7 @@ export function WishJar({ theme, config, mode, palette, contributions = [] }: Ex
           {!compact && wishes.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center text-center px-3">
               <p className="text-xs" style={{ color: "var(--exp-text-secondary)" }}>
-                The jar is empty —<br />add the first wish ✨
+                The jar is empty,<br />add the first wish ✨
               </p>
             </div>
           )}
@@ -118,7 +118,7 @@ export function WishJar({ theme, config, mode, palette, contributions = [] }: Ex
               <p className="text-2xl text-center">💫</p>
               <p className="text-sm leading-relaxed text-center mt-2 whitespace-pre-wrap">{open.message}</p>
               <p className="text-xs font-bold text-center mt-3" style={{ color: palette.primary }}>
-                — {open.display_name || "Someone"}
+               , {open.display_name || "Someone"}
               </p>
             </motion.div>
           </motion.div>

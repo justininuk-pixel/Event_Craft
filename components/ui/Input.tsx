@@ -39,7 +39,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ? String(value).length
       : 0;
 
-    // Never forward a NaN/invalid maxLength to the DOM — React warns and the attribute is
+    // Never forward a NaN/invalid maxLength to the DOM, React warns and the attribute is
     // meaningless. Callers occasionally compute this from config that can be undefined.
     const safeMaxLength =
       typeof maxLength === "number" && Number.isFinite(maxLength) ? maxLength : undefined;

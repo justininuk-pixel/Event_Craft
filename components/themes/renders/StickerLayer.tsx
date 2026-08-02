@@ -101,7 +101,7 @@ function needsTimelineClock(stickers: Sticker[]): boolean {
   });
 }
 
-/** Static (non-interactive) render of one sticker — used in full/viewer mode. */
+/** Static (non-interactive) render of one sticker, used in full/viewer mode. */
 function StaticSticker({ st }: { st: Sticker }) {
   const { isEmoji, isShape, isText, isMediaUrl } = classifySticker(st.stickerId);
   const textContent = st.stickerId.startsWith("text:")
@@ -347,7 +347,7 @@ export function StickerLayer({
           <div
             key={idx}
             className={!inWindow ? "opacity-15" : isTimed ? "opacity-60" : undefined}
-            title={isTimed ? "Timed element — schedule it in the Timeline tab" : undefined}
+            title={isTimed ? "Timed element, schedule it in the Timeline tab" : undefined}
           >
             <TransformableSticker
               sticker={st}

@@ -82,7 +82,7 @@ export function UnlockLayers({ theme, config, mode, palette, tone, onComplete }:
 
       {/* Layer stack */}
       <div className={clsx("relative w-full", compact ? "max-w-[170px] h-28" : "max-w-sm h-60")}>
-        {/* Decorative depth — remaining sealed layers behind */}
+        {/* Decorative depth, remaining sealed layers behind */}
         {Array.from({ length: Math.min(remaining, 3) }).map((_, idx) => (
           <div
             key={idx}
@@ -189,7 +189,7 @@ export function UnlockLayers({ theme, config, mode, palette, tone, onComplete }:
             </p>
             {config.sender && (
               <p className="text-xs mt-2 font-semibold" style={{ color: "var(--exp-accent)" }}>
-                — {config.sender}
+               , {config.sender}
               </p>
             )}
           </motion.div>

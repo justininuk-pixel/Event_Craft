@@ -20,7 +20,7 @@ export function HistoricRewind({
   onComplete,
   mode
 }: ExperienceViewProps) {
-  // The special date to rewind to — set by the creator in the Experience panel
+  // The special date to rewind to, set by the creator in the Experience panel
   // (falls back to New Year's Eve 1999 if unset).
   const configuredDate = config.experience?.unlockDate;
   const defaultDateStr = configuredDate || (mode === "editor-preview" ? "1995-05-15" : "1999-12-31");

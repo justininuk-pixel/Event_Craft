@@ -19,7 +19,7 @@ export function SeinfeldChain({
 
   const [showIntro, setShowIntro] = useState(true);
 
-  // Real "today" (day of year) and a real, persistent chain — the old version showed a fake
+  // Real "today" (day of year) and a real, persistent chain, the old version showed a fake
   // randomly-generated history, which made no sense to a recipient. Now the card is a genuine
   // challenge: mark each day you keep the promise; the chain survives revisits (localStorage).
   const storageKey = `cc-chain-${(config.title || "chain").slice(0, 40)}`;
@@ -70,7 +70,7 @@ export function SeinfeldChain({
       style={{ backgroundColor: bgColors[0] }}
     >
 
-      {/* Intro — explains the mechanic so the recipient knows what this is */}
+      {/* Intro, explains the mechanic so the recipient knows what this is */}
       {showIntro && (
         <div className="absolute inset-0 z-40 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
           <div className="bg-white rounded-3xl p-7 max-w-sm w-full text-center shadow-2xl">
@@ -82,7 +82,7 @@ export function SeinfeldChain({
               {config.body || "A little challenge, from me to you."}
             </p>
             <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Every day you keep it up, tap today&apos;s square. Keep the chain alive — a 30-day
+              Every day you keep it up, tap today&apos;s square. Keep the chain alive, a 30-day
               streak earns you a celebration. This page remembers your progress.
             </p>
             <button

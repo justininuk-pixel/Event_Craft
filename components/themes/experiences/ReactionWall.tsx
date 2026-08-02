@@ -74,7 +74,7 @@ export function ReactionWall({ theme, config, mode, contributions = [] }: Experi
                       </p>
                     )}
                     <p className={clsx("font-bold text-center opacity-70", compact ? "text-[7px] mt-0.5" : "text-[10px] mt-1.5")}>
-                      — {c.display_name || "Someone"}
+                     , {c.display_name || "Someone"}
                     </p>
                   </motion.div>
                 );

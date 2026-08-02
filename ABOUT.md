@@ -1,12 +1,12 @@
-# About Event Craft 🎉
+# About Event Craft
 
 **Event Craft** is an open-source, interactive digital card and micro-experience builder. It transforms ordinary static invitations and digital greetings into memorable, interactive mini-apps that recipients can tap, play, reveal, solve, and explore.
 
 ---
 
-## 🌟 The Vision
+## The Vision
 
-Digital greeting cards haven't changed much in twenty years — most are still passive images, PDFs, or basic animated GIFs. 
+Digital greeting cards haven't changed much in twenty years, most are still passive images, PDFs, or basic animated GIFs. 
 
 **Event Craft** was created to change that by turning every message into a personalized micro-experience:
 - Want to ask someone out on a date? Send a **Neon Evading Request** where the "No" button dodges their cursor.
@@ -15,7 +15,7 @@ Digital greeting cards haven't changed much in twenty years — most are still p
 
 ---
 
-## 🚀 Core Platform Architecture
+## Core Platform Architecture
 
 Event Craft is structured around **three main engines**:
 
@@ -33,7 +33,7 @@ Event Craft is structured around **three main engines**:
 
 ---
 
-## 🎨 Visual & Audio Capabilities
+## Visual & Audio Capabilities
 
 - **Animation Engines**: Particle systems (rose petals, stars, sakura, fireflies), confetti cannons, snowfall, rain, glitch overlays, 3D tilt cards, and audio visualizers.
 - **Curated Soundscapes**: Built-in ambient tracks (acoustic guitar, chiptune 8-bit, orchestral, synthwave, traditional instruments) and sound effects (applause, cork pop, camera shutter, typewriter keys).
@@ -41,7 +41,7 @@ Event Craft is structured around **three main engines**:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Server Components)
 - **UI & Logic**: [React 19](https://react.dev/), TypeScript
@@ -51,6 +51,6 @@ Event Craft is structured around **three main engines**:
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the MIT License. See `LICENSE` for more information.

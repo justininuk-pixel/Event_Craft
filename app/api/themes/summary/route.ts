@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { THEMES } from "@/lib/themes/registry";
 
 // Lightweight theme metadata (no visual/audio/delivery config). Used by surfaces that only need
-// names, categories and search tags — the command palette, project/collab labels, event picker —
+// names, categories and search tags, the command palette, project/collab labels, event picker,
 // so they don't pull the full catalog into the client.
 export const dynamic = "force-static";
 

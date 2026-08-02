@@ -43,7 +43,7 @@ export function backgroundCss(palette: ThemePalette): string {
 
 /**
  * Lazy registry of every experience mini-app, keyed by experienceId. Each entry is a
- * code-split chunk loaded on demand via next/dynamic — so a card view only downloads the
+ * code-split chunk loaded on demand via next/dynamic, so a card view only downloads the
  * one experience it renders, instead of all 496 components. Import paths must be
  * string literals for the bundler to split them (next/dynamic constraint).
  */
@@ -861,7 +861,7 @@ export function ExperienceHost({
     setCompleted(true);
     if (!celebratedRef.current) {
       celebratedRef.current = true;
-      // Central end-of-experience celebration — most of the ~500 plan-theme experiences
+      // Central end-of-experience celebration, most of the ~500 plan-theme experiences
       // never fired their own confetti, so cards ended flat with no celebration.
       fireConfetti(
         [palette.primary, palette.accent, palette.secondary].filter(

@@ -27,7 +27,7 @@ function persist(kits: BrandKit[]): BrandKit[] {
     try {
       localStorage.setItem(KEY, JSON.stringify(kits.slice(0, 12)));
     } catch {
-      /* storage full / unavailable — ignore */
+      /* storage full / unavailable, ignore */
     }
   }
   return kits;

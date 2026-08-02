@@ -168,9 +168,9 @@ export interface ThemeVisual {
 }
 
 export interface ThemeContent {
-  title: string;             // Default title — must be real, appropriate text. Never "Your Title Here"
+  title: string;             // Default title, must be real, appropriate text. Never "Your Title Here"
   subtitle?: string;
-  body?: string;             // Default body text — real, sendable message
+  body?: string;             // Default body text, real, sendable message
   recipientLabel: string;    // Placeholder text, e.g. "their name"
   senderLabel: string;       // Placeholder text, e.g. "your name"
   cta?: {                    // Only for interactive/funny themes
@@ -237,8 +237,8 @@ export interface ThemeEditable {
 
 // ===================== EXPERIENCE ENGINE =====================
 //
-// A theme can be a unique "experience" — a mini-app with its own STRUCTURE,
-// INTERACTION, PURPOSE, FLOW and INPUT TYPE — rendered by a dedicated component
+// A theme can be a unique "experience", a mini-app with its own STRUCTURE,
+// INTERACTION, PURPOSE, FLOW and INPUT TYPE, rendered by a dedicated component
 // instead of the metadata-driven ThemeRenderer. This is the layer that lets a
 // theme differ in *what it does*, not merely in fonts/colours/animation.
 // Style (palette, fonts, background, animation) still layers on top and stays

@@ -21,7 +21,7 @@ function uniqueById(themes: Theme[]): Theme[] {
   for (const theme of themes) {
     if (seen.has(theme.id)) {
       if (process.env.NODE_ENV !== "production") {
-        console.warn(`[themes] Duplicate theme id "${theme.id}" ignored — fix the source definition.`);
+        console.warn(`[themes] Duplicate theme id "${theme.id}" ignored, fix the source definition.`);
       }
       continue;
     }
@@ -32,7 +32,7 @@ function uniqueById(themes: Theme[]): Theme[] {
 }
 
 export const THEMES: Theme[] = uniqueById([
-  // Experience themes lead — each is a unique mini-app, not a style swap.
+  // Experience themes lead, each is a unique mini-app, not a style swap.
   ...EXPERIENCE_THEMES,
   ...INTERACTIVE_THEMES,
   ...ROMANCE_WEDDING_THEMES,

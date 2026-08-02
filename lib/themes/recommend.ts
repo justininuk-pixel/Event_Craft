@@ -1,5 +1,5 @@
 // Server-side recommendation engine. Pure functions: given the full theme catalog and a
-// user's interaction history, produce Netflix-style rows. No React, no client bundle impact —
+// user's interaction history, produce Netflix-style rows. No React, no client bundle impact,
 // this runs inside the /api/themes/recommend route handler.
 import { Theme } from "./types";
 
@@ -116,7 +116,7 @@ export function buildThemeRows(allThemes: Theme[], ix: UserInteractions, upcomin
     title: hasSignal ? "Recommended for you" : "Unique experiences to try",
     subtitle: hasSignal
       ? "Tuned to what you’ve liked and saved"
-      : "Mini-apps with a real mechanic — not just fonts and colours",
+      : "Mini-apps with a real mechanic, not just fonts and colours",
     themes: take(shuffle(rankedExperiences.slice(0, ROW_SIZE * 2)), ROW_SIZE, used),
     viewAllHref: "/explore?kind=experiences",
   });

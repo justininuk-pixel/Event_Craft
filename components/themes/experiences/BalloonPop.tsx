@@ -220,7 +220,7 @@ export function BalloonPop({
     }
 
     const activeCount = balloons.filter(x => !x.popped).length;
-    // Reveal once (almost) everything is popped — scale the threshold to the count.
+    // Reveal once (almost) everything is popped, scale the threshold to the count.
     if (activeCount <= Math.max(1, Math.floor(balloonCount * 0.1))) {
       setIsRevealed(true);
       onComplete?.();

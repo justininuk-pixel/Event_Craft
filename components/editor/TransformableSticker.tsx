@@ -408,7 +408,7 @@ export function TransformableSticker({
     };
 
     const handlePointerUp = () => {
-      // Read the final transform from the ref mirror — never call onUpdate inside a setState
+      // Read the final transform from the ref mirror, never call onUpdate inside a setState
       // updater (React forbids updating another component from within an updater/render).
       const currentLocal = localTransformRef.current;
       applyLocalTransform(null);

@@ -502,7 +502,7 @@ export default function CreatorDashboardPage() {
               </div>
             )}
 
-            {/* Collaborative contributions — manage (moderate, reorder, hide) */}
+            {/* Collaborative contributions, manage (moderate, reorder, hide) */}
             {card.isCollaborative && (
               <ContributionsManager cardId={card.id} secret={secret} collabUrl={collabUrl} />
             )}

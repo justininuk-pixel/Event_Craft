@@ -725,7 +725,7 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
               onClick={() => triggerVibrate(15)}
               className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-bold font-mono group"
             >
-              <span>✨ Create your own interactive card —</span>
+              <span>✨ Create your own interactive card,</span>
               <span className="underline decoration-primary/40 group-hover:decoration-primary transition-all underline-offset-4">
                 CelebrationCraft
               </span>

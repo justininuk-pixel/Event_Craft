@@ -127,7 +127,7 @@ export function FutureMessage({ theme, config, mode, palette, tone, onComplete }
 
             {isDemo && !compact && (
               <p className="text-[11px] mt-4 opacity-70" style={{ color: "var(--exp-text-secondary)" }}>
-                Demo countdown — set the unlock date in the editor.
+                Demo countdown, set the unlock date in the editor.
               </p>
             )}
 
@@ -175,7 +175,7 @@ export function FutureMessage({ theme, config, mode, palette, tone, onComplete }
             )}
             {config.sender && !compact && (
               <p className="text-xs mt-4 font-semibold" style={{ color: "var(--exp-accent)" }}>
-                — {config.sender}
+               , {config.sender}
               </p>
             )}
 

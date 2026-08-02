@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
  * "Pull back the tide" reveal. The message is written in the sand and covered by the sea; the
  * recipient presses and holds to draw the water back until the words surface. Releasing lets the
  * tide flow back in. This replaces the old version, which only revealed the message when the
- * real-world tide happened to be low — meaning a recipient could open the card and just see an
+ * real-world tide happened to be low, meaning a recipient could open the card and just see an
  * ocean for hours with no way to read their message.
  */
 export function TideTracker({

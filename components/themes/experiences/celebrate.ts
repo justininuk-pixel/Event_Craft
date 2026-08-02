@@ -23,6 +23,6 @@ export async function fireConfetti(colors?: string[], intensity = 1): Promise<vo
       zIndex: 9999,
     });
   } catch {
-    /* confetti is non-essential — ignore failures */
+    /* confetti is non-essential, ignore failures */
   }
 }

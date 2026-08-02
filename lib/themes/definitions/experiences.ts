@@ -6,14 +6,14 @@ import { Theme } from "../types";
 // Unlike the metadata-driven "style" themes, each of these renders as a
 // dedicated mini-app (see components/themes/experiences/) with its own
 // STRUCTURE, INTERACTION, PURPOSE, FLOW and INPUT TYPE. Style (palette,
-// fonts, background, animation) still layers on top and stays editable —
+// fonts, background, animation) still layers on top and stays editable,
 // STRUCTURE is what makes these themes fundamentally different from one
 // another, not styling.
 // =====================================================================
 
 export const EXPERIENCE_THEMES: Theme[] = [
   // -------------------------------------------------------------------
-  // 1. MEMORY TIMELINE — scroll a shared history; tap a moment to open it
+  // 1. MEMORY TIMELINE, scroll a shared history; tap a moment to open it
   // -------------------------------------------------------------------
   {
     id: "exp-memory-timeline",
@@ -33,7 +33,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     mechanic: {
       structure: "Vertical timeline of moments, oldest to newest",
       interaction: "Scroll and tap each moment to unlock its photo + message",
-      purpose: "Relive a shared history together — a living memory archive",
+      purpose: "Relive a shared history together, a living memory archive",
       flow: "linear",
       inputType: ["text", "photo", "collaborative"],
       summary: "Turns a flat card into a scrollable, unlockable story of your history.",
@@ -50,7 +50,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
           id: "m1",
           date: "Where it began",
           title: "The day our paths crossed",
-          body: "I still remember it perfectly — the moment everything quietly changed.",
+          body: "I still remember it perfectly, the moment everything quietly changed.",
           emoji: "🌱",
         },
         {
@@ -64,7 +64,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
           id: "m3",
           date: "The little things",
           title: "Ordinary days, extraordinary you",
-          body: "Coffee, inside jokes, quiet evenings — somehow you made all of it special.",
+          body: "Coffee, inside jokes, quiet evenings, somehow you made all of it special.",
           emoji: "☕",
         },
         {
@@ -139,13 +139,13 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // -------------------------------------------------------------------
-  // 2. UNLOCK LAYERS — peel nested layers, each a deeper message
+  // 2. UNLOCK LAYERS, peel nested layers, each a deeper message
   // -------------------------------------------------------------------
   {
     id: "exp-unlock-layers",
     name: "Unlock Layers",
     description:
-      "A message wrapped in layers. Each tap peels one away to reveal something deeper — building emotion all the way to the heart of it.",
+      "A message wrapped in layers. Each tap peels one away to reveal something deeper, building emotion all the way to the heart of it.",
     emoji: "🎁",
     category: "family",
     subcategory: "Layered Reveal",
@@ -162,7 +162,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "Build emotional anticipation toward one heartfelt truth",
       flow: "linear",
       inputType: ["text"],
-      summary: "Each click reveals a deeper message — emotion that builds, not a wall of text.",
+      summary: "Each click reveals a deeper message, emotion that builds, not a wall of text.",
     },
     bestFor: [
       "Heartfelt confessions",
@@ -175,7 +175,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
         {
           id: "l1",
           label: "Tap to begin…",
-          body: "Hey — I've been wanting to tell you something. Keep going.",
+          body: "Hey, I've been wanting to tell you something. Keep going.",
           emoji: "💌",
         },
         {
@@ -261,7 +261,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // -------------------------------------------------------------------
-  // 3. FUTURE MESSAGE — sealed until a chosen date; countdown + anticipation
+  // 3. FUTURE MESSAGE, sealed until a chosen date; countdown + anticipation
   // -------------------------------------------------------------------
   {
     id: "exp-future-message",
@@ -294,7 +294,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     ],
     experienceDefaults: {
       teaser: "A message is waiting for you. It opens the moment the time is right.",
-      // unlockDate intentionally empty — editor sets it; preview shows a demo countdown.
+      // unlockDate intentionally empty, editor sets it; preview shows a demo countdown.
       unlockDate: "",
     },
     visual: {
@@ -314,9 +314,9 @@ export const EXPERIENCE_THEMES: Theme[] = [
       animationConfig: {},
     },
     content: {
-      title: "For You — Later",
+      title: "For You, Later",
       subtitle: "Sealed until the moment arrives",
-      body: "I wanted this to reach you at exactly the right time. If you're reading it, the moment is finally here — and I meant every word. Thinking of you.",
+      body: "I wanted this to reach you at exactly the right time. If you're reading it, the moment is finally here, and I meant every word. Thinking of you.",
       recipientLabel: "their name",
       senderLabel: "your name",
       supportsMedia: true,
@@ -360,7 +360,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // -------------------------------------------------------------------
-  // 4. PUZZLE REVEAL — solve a word scramble to unlock the message
+  // 4. PUZZLE REVEAL, solve a word scramble to unlock the message
   // -------------------------------------------------------------------
   {
     id: "exp-puzzle-reveal",
@@ -459,7 +459,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // REACTION GESTURE — tap to make an animated hand perform a gesture
+  // REACTION GESTURE, tap to make an animated hand perform a gesture
   // ===================================================================
   {
     id: "exp-gesture-flipoff",
@@ -479,10 +479,10 @@ export const EXPERIENCE_THEMES: Theme[] = [
     mechanic: {
       structure: "A single tappable reaction stage",
       interaction: "Tap to fire an animated hand gesture, then the message reveals",
-      purpose: "Say the petty thing — playfully — with a gesture that lands",
+      purpose: "Say the petty thing, playfully, with a gesture that lands",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Tap and a hand throws the salute 🖕 — then your message drops.",
+      summary: "Tap and a hand throws the salute 🖕, then your message drops.",
     },
     bestFor: ["Petty payback (in good fun)", "Roasting your bestie", "Group-chat chaos", "Office frenemies"],
     experienceDefaults: {
@@ -532,7 +532,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-gesture-highfive",
     name: "Up High! 🙌",
-    description: "A celebratory high five that leaves you hanging until you tap — then bursts into confetti.",
+    description: "A celebratory high five that leaves you hanging until you tap, then bursts into confetti.",
     emoji: "🙌",
     category: "achievement",
     subcategory: "Hype",
@@ -549,10 +549,10 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "Hype someone up for a win",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Don't leave them hanging — tap for a confetti high five.",
+      summary: "Don't leave them hanging, tap for a confetti high five.",
     },
     bestFor: ["Wins & promotions", "Passing exams", "Hyping a friend", "Team kudos"],
-    experienceDefaults: { gesture: "high-five", gesturePrompt: "Don't leave me hanging — tap!" },
+    experienceDefaults: { gesture: "high-five", gesturePrompt: "Don't leave me hanging, tap!" },
     visual: {
       palette: {
         primary: "#f59e0b",
@@ -572,7 +572,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Way To Go!",
       subtitle: "You did the thing",
-      body: "You absolutely crushed it. So proud of you — now give me five! 🙌",
+      body: "You absolutely crushed it. So proud of you, now give me five! 🙌",
       recipientLabel: "their name",
       senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
@@ -744,7 +744,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Respect.",
       subtitle: "From one to another",
-      body: "Solid work. Absolute respect — I've always got your back. 👊",
+      body: "Solid work. Absolute respect, I've always got your back. 👊",
       recipientLabel: "their name",
       senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
@@ -761,12 +761,12 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // STORY MODE — multi-page book the recipient pages through
+  // STORY MODE, multi-page book the recipient pages through
   // ===================================================================
   {
     id: "exp-story-love",
     name: "Our Story (Storybook)",
-    description: "A little book of your relationship — turn the pages through your chapters together.",
+    description: "A little book of your relationship, turn the pages through your chapters together.",
     emoji: "📖",
     category: "romance",
     subcategory: "Storybook",
@@ -780,7 +780,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     mechanic: {
       structure: "A multi-page book, paged one chapter at a time",
       interaction: "Turn pages forward/back through the narrative",
-      purpose: "Tell a longer, paced story — not one flat message",
+      purpose: "Tell a longer, paced story, not one flat message",
       flow: "linear",
       inputType: ["text", "photo"],
       summary: "A page-turning storybook of your relationship.",
@@ -788,9 +788,9 @@ export const EXPERIENCE_THEMES: Theme[] = [
     bestFor: ["Anniversaries", "Valentine's", "Long relationships", "'Open on our wedding day'"],
     experienceDefaults: {
       pages: [
-        { id: "p1", title: "Chapter One", body: "It started with a single hello — and somehow the whole world tilted." },
+        { id: "p1", title: "Chapter One", body: "It started with a single hello, and somehow the whole world tilted." },
         { id: "p2", title: "Chapter Two", body: "Then came a thousand little moments: the inside jokes, the late nights, the ordinary days that felt anything but." },
-        { id: "p3", title: "Chapter Three", body: "And here we are — still writing it, one page at a time. I wouldn't want anyone else as my co-author." },
+        { id: "p3", title: "Chapter Three", body: "And here we are, still writing it, one page at a time. I wouldn't want anyone else as my co-author." },
       ],
     },
     visual: {
@@ -830,7 +830,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-story-birthday",
     name: "The Book of You",
-    description: "A birthday storybook — page through the chapters of someone's amazing year.",
+    description: "A birthday storybook, page through the chapters of someone's amazing year.",
     emoji: "🎂",
     category: "birthday",
     subcategory: "Storybook",
@@ -853,7 +853,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     experienceDefaults: {
       pages: [
         { id: "p1", title: "Once upon a year", body: "This year you did more than you give yourself credit for. Let's turn the pages…" },
-        { id: "p2", title: "The good chapters", body: "The laughs, the wins, the small brave things nobody saw — they all counted." },
+        { id: "p2", title: "The good chapters", body: "The laughs, the wins, the small brave things nobody saw, they all counted." },
         { id: "p3", title: "Happy Birthday", body: "Here's to the next chapter. May it be your best one yet. 🎂" },
       ],
     },
@@ -894,7 +894,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-story-adventure",
     name: "The Adventure (Storybook)",
-    description: "Page through your shared adventures — perfect for friendships, reunions and farewells.",
+    description: "Page through your shared adventures, perfect for friendships, reunions and farewells.",
     emoji: "🗺️",
     category: "friendship",
     subcategory: "Storybook",
@@ -917,7 +917,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       pages: [
         { id: "p1", title: "How it began", body: "Two people, one questionable idea, and the start of something great." },
         { id: "p2", title: "The middle bits", body: "Detours, snacks, terrible decisions, and the best stories we still tell." },
-        { id: "p3", title: "To be continued", body: "Wherever the road goes next — save me a seat. 🗺️" },
+        { id: "p3", title: "To be continued", body: "Wherever the road goes next, save me a seat. 🗺️" },
       ],
     },
     visual: {
@@ -956,7 +956,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // SCRATCH CARD — scratch off the foil to reveal the message
+  // SCRATCH CARD, scratch off the foil to reveal the message
   // ===================================================================
   {
     id: "exp-scratch-reveal",
@@ -1011,7 +1011,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-scratch-gender",
     name: "Boy or Girl? (Scratch)",
-    description: "A pastel scratch card for a gender reveal — scratch to discover the big news.",
+    description: "A pastel scratch card for a gender reveal, scratch to discover the big news.",
     emoji: "🍼",
     category: "baby",
     subcategory: "Gender Reveal",
@@ -1060,7 +1060,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-scratch-win",
     name: "You've Won! (Scratch)",
-    description: "A cheeky lottery-style scratch ticket — they scratch expecting riches, get your message instead.",
+    description: "A cheeky lottery-style scratch ticket, they scratch expecting riches, get your message instead.",
     emoji: "🎰",
     category: "funny",
     subcategory: "Gag",
@@ -1076,7 +1076,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "A playful gotcha / funny message",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Looks like a winning ticket — the prize is your message.",
+      summary: "Looks like a winning ticket, the prize is your message.",
     },
     bestFor: ["Funny friends", "Playful reveals", "Cheeky invites", "April Fools"],
     experienceDefaults: { scratchHint: "Scratch your ticket 🎰" },
@@ -1108,7 +1108,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // GIFT UNWRAP — tap to tear away the wrapping, then it opens
+  // GIFT UNWRAP, tap to tear away the wrapping, then it opens
   // ===================================================================
   {
     id: "exp-gift-birthday",
@@ -1130,7 +1130,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "Turn opening the card into unwrapping a present",
       flow: "game-like",
       inputType: ["text"],
-      summary: "They actually unwrap it — tap by tap — before the message bursts out.",
+      summary: "They actually unwrap it, tap by tap, before the message bursts out.",
     },
     bestFor: ["Birthdays", "Gift messages", "Surprises", "Kids"],
     experienceDefaults: { wrapLayers: 3 },
@@ -1163,7 +1163,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-gift-thankyou",
     name: "A Little Something 🎁",
-    description: "A small wrapped token of thanks — unwrap it to find a heartfelt thank-you.",
+    description: "A small wrapped token of thanks, unwrap it to find a heartfelt thank-you.",
     emoji: "🎀",
     category: "thank-you",
     subcategory: "Gift Reveal",
@@ -1195,7 +1195,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Just For You",
       subtitle: "Unwrap it",
-      body: "Thank you — truly. Your kindness meant more than you know, and I won't forget it. 🤍",
+      body: "Thank you, truly. Your kindness meant more than you know, and I won't forget it. 🤍",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1211,12 +1211,12 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // BALLOON POP — pop every balloon to reveal the message
+  // BALLOON POP, pop every balloon to reveal the message
   // ===================================================================
   {
     id: "exp-balloon-birthday",
     name: "Pop for Your Birthday 🎈",
-    description: "A bunch of balloons the recipient pops one by one — clear them all to reveal your birthday message.",
+    description: "A bunch of balloons the recipient pops one by one, clear them all to reveal your birthday message.",
     emoji: "🎈",
     category: "birthday",
     subcategory: "Interactive Party",
@@ -1298,7 +1298,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Congrats Are In Order!",
       subtitle: "Pop to celebrate",
-      body: "You did it! 🥳 So incredibly proud of you. Go celebrate — you've more than earned it!",
+      body: "You did it! 🥳 So incredibly proud of you. Go celebrate, you've more than earned it!",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1315,7 +1315,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-balloon-invite",
     name: "Pop the Invite 🎈",
-    description: "A party invitation hidden behind balloons — pop them all to see the details.",
+    description: "A party invitation hidden behind balloons, pop them all to see the details.",
     emoji: "🎉",
     category: "invitation",
     subcategory: "Interactive Invite",
@@ -1363,7 +1363,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // QUIZ REVEAL — answer questions, then a scored reveal
+  // QUIZ REVEAL, answer questions, then a scored reveal
   // ===================================================================
   {
     id: "exp-quiz-couple",
@@ -1407,7 +1407,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "How Well Do You Know Me?",
       subtitle: "Answer to unlock your message",
-      body: "However you scored — you know my heart better than anyone. Happy anniversary. 💞",
+      body: "However you scored, you know my heart better than anyone. Happy anniversary. 💞",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1424,7 +1424,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-quiz-birthday",
     name: "The Birthday Quiz",
-    description: "A fun quiz about the birthday star — score points, then reveal the birthday wish.",
+    description: "A fun quiz about the birthday star, score points, then reveal the birthday wish.",
     emoji: "🎂",
     category: "birthday",
     subcategory: "Quiz",
@@ -1478,12 +1478,12 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // MEMORY MATCH — clear the board to reveal the message
+  // MEMORY MATCH, clear the board to reveal the message
   // ===================================================================
   {
     id: "exp-match-love",
     name: "Match Made",
-    description: "A memory-match game — find every matching pair to unlock a love note.",
+    description: "A memory-match game, find every matching pair to unlock a love note.",
     emoji: "❤️",
     category: "romance",
     subcategory: "Match Game",
@@ -1516,7 +1516,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Match Made",
       subtitle: "Find every pair",
-      body: "Some things just match — like you and me. 💘",
+      body: "Some things just match, like you and me. 💘",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1533,7 +1533,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   {
     id: "exp-match-birthday",
     name: "Birthday Memory Match",
-    description: "A party-themed memory-match — clear the cards to pop the birthday message.",
+    description: "A party-themed memory-match, clear the cards to pop the birthday message.",
     emoji: "🎈",
     category: "birthday",
     subcategory: "Match Game",
@@ -1565,7 +1565,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Birthday Match!",
       subtitle: "Clear the board",
-      body: "🎉 You found them all — just like you find a way to make everyone smile. Happy Birthday!",
+      body: "🎉 You found them all, just like you find a way to make everyone smile. Happy Birthday!",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1581,7 +1581,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // TAP TO GROW — tap to grow something, then it blooms into a message
+  // TAP TO GROW, tap to grow something, then it blooms into a message
   // ===================================================================
   {
     id: "exp-grow-flower",
@@ -1603,7 +1603,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "A gentle, nurturing build-up to the message",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Tap to grow a flower — it blooms into your message.",
+      summary: "Tap to grow a flower, it blooms into your message.",
     },
     bestFor: ["New relationships", "Anniversaries", "'Thinking of you'", "Apologies"],
     experienceDefaults: { growStages: ["🌱", "🌿", "🌷", "🌸", "🌺"] },
@@ -1619,7 +1619,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Watch It Grow",
       subtitle: "Tap to help it bloom",
-      body: "Some things grow slowly and beautifully — like how I feel about you. 🌷",
+      body: "Some things grow slowly and beautifully, like how I feel about you. 🌷",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1652,7 +1652,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "Make 'building the cake' the birthday moment",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Tap to build a birthday cake — then the wish appears.",
+      summary: "Tap to build a birthday cake, then the wish appears.",
     },
     bestFor: ["Birthdays", "Kids", "Surprises", "Sweet messages"],
     experienceDefaults: { growStages: ["🥣", "🧁", "🍰", "🎂"] },
@@ -1668,7 +1668,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Let's Build a Cake!",
       subtitle: "Tap to add the layers",
-      body: "🎂 Ta-da! One cake, made with love. Happy Birthday — make a wish!",
+      body: "🎂 Ta-da! One cake, made with love. Happy Birthday, make a wish!",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1701,7 +1701,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "Celebrate a friendship that's grown over time",
       flow: "game-like",
       inputType: ["text"],
-      summary: "Tap to grow a friendship tree — it reveals your note.",
+      summary: "Tap to grow a friendship tree, it reveals your note.",
     },
     bestFor: ["Friendship anniversaries", "Thank-you to a friend", "Long friendships", "Reunions"],
     experienceDefaults: { growStages: ["🌱", "🌿", "🪴", "🌳"] },
@@ -1717,7 +1717,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
     content: {
       title: "Our Friendship Tree",
       subtitle: "Tap to watch it grow",
-      body: "From a tiny seed to something strong and lasting — that's us. Thanks for growing with me. 🌳",
+      body: "From a tiny seed to something strong and lasting, that's us. Thanks for growing with me. 🌳",
       recipientLabel: "their name", senderLabel: "your name",
       supportsMedia: false, supportsVoice: false, supportsHandwriting: false, supportsCollage: false,
     },
@@ -1733,13 +1733,13 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // LIVE CANVAS — a shared board everyone draws/signs on (collaborative)
+  // LIVE CANVAS, a shared board everyone draws/signs on (collaborative)
   // ===================================================================
   {
     id: "exp-live-canvas",
     name: "Live Canvas",
     description:
-      "One shared canvas everyone draws, signs and doodles on. Each contribution lands on the wall live — a true group mural.",
+      "One shared canvas everyone draws, signs and doodles on. Each contribution lands on the wall live, a true group mural.",
     emoji: "🎨",
     category: "friendship",
     subcategory: "Collaborative Canvas",
@@ -1756,7 +1756,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
       purpose: "A collaborative group canvas for many contributors",
       flow: "non-linear",
       inputType: ["draw", "text", "photo", "collaborative"],
-      summary: "Everyone draws on ONE canvas together — a live group mural.",
+      summary: "Everyone draws on ONE canvas together, a live group mural.",
     },
     bestFor: ["Group cards", "Farewells & leaving cards", "Class/team boards", "Big celebrations"],
     experienceDefaults: {},
@@ -1802,13 +1802,13 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // WISH JAR — contributors drop wishes into a shared jar (collaborative)
+  // WISH JAR, contributors drop wishes into a shared jar (collaborative)
   // ===================================================================
   {
     id: "exp-wish-jar",
     name: "Wish Jar",
     description:
-      "A shared jar everyone drops a wish into. The recipient taps each folded wish to read it — a keepsake of everyone's hopes for them.",
+      "A shared jar everyone drops a wish into. The recipient taps each folded wish to read it, a keepsake of everyone's hopes for them.",
     emoji: "🫙",
     category: "life-event",
     subcategory: "Collaborative Jar",
@@ -1868,7 +1868,7 @@ export const EXPERIENCE_THEMES: Theme[] = [
   },
 
   // ===================================================================
-  // REACTION WALL — a shared wall of everyone's notes (collaborative)
+  // REACTION WALL, a shared wall of everyone's notes (collaborative)
   // ===================================================================
   {
     id: "exp-reaction-wall",

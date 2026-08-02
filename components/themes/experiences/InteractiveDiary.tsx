@@ -153,7 +153,7 @@ export function InteractiveDiary({
                 
                 {/* Simulated handwritten signoff */}
                 <div className="mt-16 text-right font-script text-3xl text-blue-900/80 -rotate-2 opacity-80" style={{ fontFamily: "'Dancing Script', cursive" }}>
-                   — {config.recipient || "A Friend"}
+                  , {config.recipient || "A Friend"}
                 </div>
              </div>
           </motion.div>

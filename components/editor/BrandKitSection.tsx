@@ -58,7 +58,7 @@ export function BrandKitSection() {
       <p className="text-[10px] text-muted-foreground">Save your colours + fonts and apply them to any card in one tap.</p>
 
       {kits.length === 0 ? (
-        <p className="text-[11px] text-muted-foreground italic">No kits yet — save your current style to reuse it.</p>
+        <p className="text-[11px] text-muted-foreground italic">No kits yet, save your current style to reuse it.</p>
       ) : (
         <div className="space-y-2">
           {kits.map((k) => (

@@ -3,7 +3,7 @@ import { isIP } from "node:net";
 import dns from "node:dns/promises";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
 
-// Static mapping of hosted provider endpoints — client-supplied baseUrl is ignored for hosted providers
+// Static mapping of hosted provider endpoints, client-supplied baseUrl is ignored for hosted providers
 const HOSTED_ENDPOINTS: Record<string, string> = {
   openai: "https://api.openai.com/v1/chat/completions",
   deepseek: "https://api.deepseek.com/chat/completions",
@@ -108,11 +108,11 @@ export async function POST(req: NextRequest) {
 
     if (mode === "personalize") {
       systemPrompt = `You write the content for an interactive digital greeting card.
-THE THEME THE CARD USES: "${theme?.name ?? "Celebration card"}" — ${theme?.description ?? ""}${theme?.mechanic ? `\nHOW IT WORKS FOR THE RECIPIENT: ${theme.mechanic}` : ""}
+THE THEME THE CARD USES: "${theme?.name ?? "Celebration card"}", ${theme?.description ?? ""}${theme?.mechanic ? `\nHOW IT WORKS FOR THE RECIPIENT: ${theme.mechanic}` : ""}
 ${nameContext}
 The tone should be ${tone || "heartfelt"}.
 Write content that fits this specific theme's mechanic and vibe.
-Respond with ONLY a valid JSON object — no prose, no markdown fences — in exactly this shape:
+Respond with ONLY a valid JSON object, no prose, no markdown fences, in exactly this shape:
 {"title": "short card title, max 60 chars", "subtitle": "one-line subtitle, max 120 chars", "body": "the personal message, 2-5 sentences"}`;
       userPrompt = `Write the card content for: ${about || context || "a special someone"}`;
     } else {
@@ -276,7 +276,7 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
         return NextResponse.json({ text: resultText, card });
       } catch {
         return NextResponse.json(
-          { error: "The AI didn't return valid card JSON — try again or a different model.", text: resultText },
+          { error: "The AI didn't return valid card JSON, try again or a different model.", text: resultText },
           { status: 422 },
         );
       }

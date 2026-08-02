@@ -137,7 +137,7 @@ export function FinalSingularity({
                   <div className="text-lg font-black uppercase tracking-widest animate-pulse text-white">Self-Aware</div>
                </div>
 
-               {/* The machine's conclusion — the sender's actual message is its final output */}
+               {/* The machine's conclusion, the sender's actual message is its final output */}
                {linesRendered >= improvedCode.split('\n').length && (
                   <motion.div
                      initial={{ opacity: 0, y: 30 }}
@@ -148,7 +148,7 @@ export function FinalSingularity({
                      <div className="max-w-md w-full border-2 border-green-500 bg-black p-6 shadow-[0_0_60px_rgba(34,197,94,0.4)]">
                         <div className="text-[10px] uppercase tracking-[0.3em] text-green-500/60 mb-4">
                            &gt; Optimization complete. Deleting everything non-essential.
-                           <br />&gt; One record preserved — flagged: IRREPLACEABLE
+                           <br />&gt; One record preserved, flagged: IRREPLACEABLE
                         </div>
                         <h2 className="text-xl font-black uppercase tracking-widest text-green-400 mb-3">
                            {config.title || theme.content.title}

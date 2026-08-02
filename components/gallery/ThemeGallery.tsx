@@ -65,7 +65,7 @@ export function ThemeGallery({
     return () => clearTimeout(timer);
   }, []);
 
-  // Themes arrive asynchronously from the API — resync the search baseline when they load
+  // Themes arrive asynchronously from the API, resync the search baseline when they load
   // (or change), otherwise the gallery would stay empty after the fetch resolves.
   useEffect(() => {
     setSearchFiltered(themes);

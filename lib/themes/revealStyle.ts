@@ -3,7 +3,7 @@ import type { CardConfig } from "./types";
 /**
  * Creator-controlled styling for an experience's final "reveal" (the message shown when the
  * mini-app completes). Stored under `config.experience.reveal` so it persists via the schema's
- * passthrough — no migration needed. Any experience can opt in by spreading these styles onto its
+ * passthrough, no migration needed. Any experience can opt in by spreading these styles onto its
  * payload title / body / container, so the ending is dynamic and changeable across the app.
  */
 export interface RevealStyle {

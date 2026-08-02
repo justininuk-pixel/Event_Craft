@@ -39,7 +39,7 @@ export function ContributionsManager({ cardId, secret, collabUrl }: Contribution
       if (!res.ok) throw new Error();
       toast.success("Contribution removed");
     } catch {
-      toast.error("Couldn't remove — restoring");
+      toast.error("Couldn't remove, restoring");
       refetch();
     } finally {
       setBusy(null);

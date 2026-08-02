@@ -26,7 +26,7 @@ function firstPhase(config: CardConfig): Phase {
 
 /**
  * Plays the full recipient journey (surprise gate → delivery → card reveal) using
- * the live editor config, without saving — so a creator can experience exactly
+ * the live editor config, without saving, so a creator can experience exactly
  * what the recipient will see before sharing.
  */
 export function RecipientSimulator({ theme, config, open, onClose }: RecipientSimulatorProps) {
@@ -118,7 +118,7 @@ export function RecipientSimulator({ theme, config, open, onClose }: RecipientSi
       </motion.div>
 
       <p className="mt-3 text-[11px] text-zinc-500 max-w-[320px] text-center">
-        This is a simulation — nothing is saved. Tap Replay to watch the journey again.
+        This is a simulation, nothing is saved. Tap Replay to watch the journey again.
       </p>
     </div>,
     document.body

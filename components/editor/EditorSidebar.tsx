@@ -364,7 +364,7 @@ export function EditorSidebar({ theme }: EditorSidebarProps) {
     return getFontCategories().flatMap((cat) =>
       cat.fonts.map((f) => ({
         value: f,
-        label: `${cat.category} — ${f}`,
+        label: `${cat.category}, ${f}`,
       }))
     );
   }, []);

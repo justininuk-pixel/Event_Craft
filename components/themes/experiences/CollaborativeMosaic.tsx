@@ -339,7 +339,7 @@ export function CollaborativeMosaic({
                            "{viewingTileMessage.message}"
                         </p>
                         <p className="text-slate-500 text-sm mb-6">
-                           — {viewingTileMessage.author}
+                          , {viewingTileMessage.author}
                         </p>
                         <button 
                            onClick={() => setViewingTileMessage(null)}

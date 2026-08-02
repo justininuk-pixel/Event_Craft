@@ -93,7 +93,7 @@ export function ElementTimeline() {
   if (stickers.length === 0) {
     return (
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Add elements or stickers first — each one appears here as a bar you can place in time.
+        Add elements or stickers first, each one appears here as a bar you can place in time.
       </p>
     );
   }

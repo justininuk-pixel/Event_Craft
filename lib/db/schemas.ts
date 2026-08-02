@@ -23,7 +23,7 @@ export const StickerPlacementSchema = z
   })
   .passthrough();
 
-// Experience (mini-app) structured content — persisted inside config JSONB.
+// Experience (mini-app) structured content, persisted inside config JSONB.
 const TimelineMilestoneSchema = z.object({
   id: z.string(),
   date: z.string().max(60).optional(),
@@ -80,7 +80,7 @@ export const ExperienceConfigSchema = z.object({
 })
   // Experiences read many bespoke knobs from config.experience (artifacts, chat messages,
   // breathing rhythm, locations, items...). Passthrough keeps them from being silently
-  // stripped at publish — the historic cause of "my settings don't show in the link".
+  // stripped at publish, the historic cause of "my settings don't show in the link".
   .passthrough();
 
 // Card Config Validation

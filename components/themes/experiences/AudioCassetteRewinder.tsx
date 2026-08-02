@@ -126,7 +126,7 @@ export function AudioCassetteRewinder({
         <div className="w-48 h-1 bg-stone-700 rounded-full mx-auto mb-2">
           <div className="h-full rounded-full transition-all" style={{ width: `${progress}%`, backgroundColor: primaryColor }} />
         </div>
-        <p className="text-stone-500 text-xs">{progress.toFixed(0)}% — {isRewinding ? "Rewinding..." : "Drag the left spool to rewind"}</p>
+        <p className="text-stone-500 text-xs">{progress.toFixed(0)}%, {isRewinding ? "Rewinding..." : "Drag the left spool to rewind"}</p>
       </div>
     </div>
   );
