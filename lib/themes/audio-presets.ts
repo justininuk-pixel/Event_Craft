@@ -1,0 +1,173 @@
+import { AudioPresetId } from "./types";
+
+export interface AudioPresetMetadata {
+  id: AudioPresetId;
+  label: string;
+  filePath: string;
+  genre: string;
+  description: string;
+  duration: string;
+}
+
+export const AUDIO_PRESETS: Record<AudioPresetId, AudioPresetMetadata> = {
+  "romantic-piano": {
+    id: "romantic-piano",
+    label: "Romantic Piano",
+    filePath: "/audio/romantic-piano.mp3",
+    genre: "Classical / Romantic",
+    description: "Soft, emotional, and intimate piano solos.",
+    duration: "1:02",
+  },
+  "upbeat-celebration": {
+    id: "upbeat-celebration",
+    label: "Upbeat Celebration",
+    filePath: "/audio/upbeat-celebration.mp3",
+    genre: "Pop / Energetic",
+    description: "Bright, fast, and happy tunes for celebrations.",
+    duration: "1:15",
+  },
+  "gentle-acoustic": {
+    id: "gentle-acoustic",
+    label: "Gentle Acoustic",
+    filePath: "/audio/gentle-acoustic.mp3",
+    genre: "Folk / Acoustic",
+    description: "Warm acoustic guitar chords and soft melodies.",
+    duration: "1:08",
+  },
+  "epic-orchestral": {
+    id: "epic-orchestral",
+    label: "Epic Orchestral",
+    filePath: "/audio/epic-orchestral.mp3",
+    genre: "Cinematic / Orchestral",
+    description: "Grand, swelling string sections and horns.",
+    duration: "1:20",
+  },
+  "lofi-chill": {
+    id: "lofi-chill",
+    label: "Lo-Fi Chill",
+    filePath: "/audio/lofi-chill.mp3",
+    genre: "Lo-Fi / Hip Hop",
+    description: "Relaxing, vinyl-crackling, chilled beats.",
+    duration: "1:10",
+  },
+  "jazz-smooth": {
+    id: "jazz-smooth",
+    label: "Smooth Jazz",
+    filePath: "/audio/jazz-smooth.mp3",
+    genre: "Jazz",
+    description: "Late-night saxophone and smooth Rhodes piano.",
+    duration: "1:14",
+  },
+  "ambient-nature": {
+    id: "ambient-nature",
+    label: "Ambient Nature",
+    filePath: "/audio/ambient-nature.mp3",
+    genre: "Ambient",
+    description: "Calm soundscapes with wind, rain, and soft synth pads.",
+    duration: "1:30",
+  },
+  "retro-synthwave": {
+    id: "retro-synthwave",
+    label: "Retro Synthwave",
+    filePath: "/audio/retro-synthwave.mp3",
+    genre: "Synthwave / Electronic",
+    description: "80s nostalgia neon synths and driving basslines.",
+    duration: "1:05",
+  },
+  "traditional-chinese": {
+    id: "traditional-chinese",
+    label: "Traditional Chinese",
+    filePath: "/audio/traditional-chinese.mp3",
+    genre: "Ethnic / Traditional",
+    description: "Authentic Guzheng and Erhu melodies for Chinese festivals.",
+    duration: "1:12",
+  },
+  "bollywood-festive": {
+    id: "bollywood-festive",
+    label: "Bollywood Festive",
+    filePath: "/audio/bollywood-festive.mp3",
+    genre: "South Asian / Festive",
+    description: "Energetic Dhol and Sitar arrangements for Diwali and weddings.",
+    duration: "1:22",
+  },
+  "african-drums": {
+    id: "african-drums",
+    label: "African Drums",
+    filePath: "/audio/african-drums.mp3",
+    genre: "African / Percussion",
+    description: "Vibrant rhythmic beats for cultural celebrations.",
+    duration: "1:00",
+  },
+  "celtic-harp": {
+    id: "celtic-harp",
+    label: "Celtic Harp",
+    filePath: "/audio/celtic-harp.mp3",
+    genre: "Folk / Celtic",
+    description: "Whimsical, flowing strings of a traditional Celtic harp.",
+    duration: "1:07",
+  },
+  "japanese-koto": {
+    id: "japanese-koto",
+    label: "Japanese Koto",
+    filePath: "/audio/japanese-koto.mp3",
+    genre: "Ethnic / Japanese",
+    description: "Plucked Koto strings for a serene Japanese spring vibe.",
+    duration: "1:10",
+  },
+  "arabic-oud": {
+    id: "arabic-oud",
+    label: "Arabic Oud",
+    filePath: "/audio/arabic-oud.mp3",
+    genre: "Middle Eastern / Traditional",
+    description: "Exotic Oud progressions for Eid and Ramadan celebrations.",
+    duration: "1:15",
+  },
+  "latin-guitar": {
+    id: "latin-guitar",
+    label: "Latin Guitar",
+    filePath: "/audio/latin-guitar.mp3",
+    genre: "Latin / Flamenco",
+    description: "Passionate Spanish classical guitar strumming.",
+    duration: "1:03",
+  },
+  "solemn-strings": {
+    id: "solemn-strings",
+    label: "Solemn Strings",
+    filePath: "/audio/solemn-strings.mp3",
+    genre: "Classical / Sad",
+    description: "Dignified and emotional cello/violin harmonies for memorials.",
+    duration: "1:25",
+  },
+  "music-box": {
+    id: "music-box",
+    label: "Music Box",
+    filePath: "/audio/music-box.mp3",
+    genre: "Nostalgic / Lullaby",
+    description: "Sweet, delicate metal-comb notes of a toy music box.",
+    duration: "0:58",
+  },
+  "chiptune-8bit": {
+    id: "chiptune-8bit",
+    label: "Chiptune 8-Bit",
+    filePath: "/audio/chiptune-8bit.mp3",
+    genre: "Chiptune / Retro Game",
+    description: "Fun, square-wave synthesized video game loops.",
+    duration: "0:55",
+  },
+  "cinematic-tension": {
+    id: "cinematic-tension",
+    label: "Cinematic Tension",
+    filePath: "/audio/cinematic-tension.mp3",
+    genre: "Atmospheric / Tension",
+    description: "Spooky, pulsing elements perfect for Halloween or mysteries.",
+    duration: "1:18",
+  },
+  none: {
+    id: "none",
+    label: "No Music (Silence)",
+    filePath: "/audio/silence.mp3",
+    genre: "Ambient",
+    description: "No background music.",
+    duration: "0:01",
+  },
+};
