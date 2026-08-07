@@ -7,17 +7,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { Theme } from "@/lib/themes/types";
 
-interface SearchBarProps {
-  themes: Theme[];
-  onSearch: (results: Theme[]) => void;
+export interface SearchBarProps<T extends Record<string, any> = Theme> {
+  themes: T[];
+  onSearch: (results: T[]) => void;
   placeholder?: string;
+  searchKeys?: (keyof T | { name: string; weight: number })[];
 }
 
-export function SearchBar({
+export function SearchBar<T extends Record<string, any> = Theme>({
   themes,
   onSearch,
   placeholder = "Search templates (e.g. Birthday, proposal, Desi, funny...)",
-}: SearchBarProps) {
+  searchKeys,
+}: SearchBarProps<T>) {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -81,16 +83,18 @@ export function SearchBar({
       return;
     }
 
+    const keys = (searchKeys as any) || [
+      { name: "name", weight: 1.0 },
+      { name: "tags", weight: 0.8 },
+      { name: "category", weight: 0.6 },
+      { name: "culture", weight: 0.6 },
+      { name: "subcategory", weight: 0.5 },
+      { name: "mood", weight: 0.4 },
+      { name: "description", weight: 0.3 },
+    ];
+
     const fuse = new Fuse(themes, {
-      keys: [
-        { name: "name", weight: 1.0 },
-        { name: "tags", weight: 0.8 },
-        { name: "category", weight: 0.6 },
-        { name: "culture", weight: 0.6 },
-        { name: "subcategory", weight: 0.5 },
-        { name: "mood", weight: 0.4 },
-        { name: "description", weight: 0.3 },
-      ],
+      keys,
       threshold: 0.35,
       minMatchCharLength: 2,
     });

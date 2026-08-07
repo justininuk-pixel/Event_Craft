@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
 import { APP_CONFIG } from "@/lib/config/app-config";
 import { parseBuffer } from "music-metadata";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+import { uploadStorageFile } from "@/lib/db/storage";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,28 +22,24 @@ export async function POST(req: NextRequest) {
     }
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const userId = formData.get("userId") as string || "";
+    const userId = (formData.get("userId") as string) || "";
 
     if (!file) {
       return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
     }
 
-    // Validation: max size
     const maxSize = APP_CONFIG.uploads.maxVoiceSizeBytes;
     if (file.size > maxSize) {
       return NextResponse.json({ error: `Audio file exceeds ${Math.round(maxSize / 1024 / 1024)}MB size limit` }, { status: 400 });
     }
 
-    // Validation: audio mime type
     if (!file.type.startsWith("audio/") && !file.name.endsWith(".webm") && !file.name.endsWith(".mp4") && !file.name.endsWith(".ogg") && !file.name.endsWith(".wav")) {
       return NextResponse.json({ error: "File must be an audio recording" }, { status: 400 });
     }
 
-    // Convert file to Buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Validate duration
     try {
       const metadata = await parseBuffer(buffer, { mimeType: file.type || "audio/webm" });
       const maxDuration = APP_CONFIG.uploads.maxVoiceDurationSec;
@@ -65,39 +57,14 @@ export async function POST(req: NextRequest) {
     const prefix = userId ? `voice/${userId}/` : "voice/";
     const fileName = `${prefix}${Date.now()}-${Math.random().toString(36).substring(2, 10)}.${fileExt}`;
 
-    // Ensure bucket exists
-    const { data: buckets, error: getBucketsErr } = await supabaseAdmin.storage.listBuckets();
-    if (getBucketsErr) {
-      console.warn("Failed to list buckets:", getBucketsErr);
-    } else if (buckets && !buckets.some(b => b.id === "card-media")) {
-      const { error: createBucketErr } = await supabaseAdmin.storage.createBucket("card-media", {
-        public: true,
-      });
-      if (createBucketErr) {
-        console.error("Failed to create bucket 'card-media':", createBucketErr);
-      }
-    }
+    const { publicUrl, error } = await uploadStorageFile("card-media", fileName, buffer, file.type || "audio/webm");
 
-    // Upload to Supabase Storage bucket 'card-media'
-    const { error } = await supabaseAdmin.storage
-      .from("card-media")
-      .upload(fileName, buffer, {
-        contentType: file.type || "audio/webm",
-        cacheControl: "31536000",
-        upsert: true,
-      });
-
-    if (error) {
+    if (error || !publicUrl) {
       console.error("Supabase Storage error:", error);
-      return NextResponse.json({ error: `Upload failed: ${error.message}` }, { status: 500 });
+      return NextResponse.json({ error: `Upload failed: ${error?.message || "Unknown error"}` }, { status: 500 });
     }
 
-    // Get Public URL
-    const { data: urlData } = supabaseAdmin.storage
-      .from("card-media")
-      .getPublicUrl(fileName);
-
-    return NextResponse.json({ url: urlData.publicUrl }, { status: 201 });
+    return NextResponse.json({ url: publicUrl }, { status: 201 });
   } catch (err) {
     console.error("API voice upload error:", err);
     const errMsg = err instanceof Error ? err.message : "Server error";

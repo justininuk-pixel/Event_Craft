@@ -43,8 +43,11 @@ next-env.d.ts
 # agents & temp logs
 .agents
 .claude
+graphify-out
+**/graphify-out
 file_map.txt
 lint_output.txt
 fix_renderer.js
 *.log
+
 

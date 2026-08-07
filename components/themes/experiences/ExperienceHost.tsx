@@ -19,18 +19,33 @@ export interface ExperienceHostProps {
   onInteractionComplete?: () => void;
 }
 
-/** Props handed to each individual experience mini-app. */
-export interface ExperienceViewProps {
+export interface BaseThemeProps {
   theme: Theme;
   config: CardConfig;
   mode: ExperienceMode;
+}
+
+export interface StyleProps {
   palette: ThemePalette;
   headingFont: string;
   bodyFont: string;
   tone: number; // 0 playful – 100 heartfelt
+}
+
+export interface CollaborativeProps {
   contributions?: Contribution[];
+}
+
+export interface InteractiveCallbacks {
   onComplete?: () => void;
 }
+
+/** Props handed to each individual experience mini-app (composed from modular sub-interfaces). */
+export interface ExperienceViewProps
+  extends BaseThemeProps,
+    StyleProps,
+    CollaborativeProps,
+    InteractiveCallbacks {}
 
 export function backgroundCss(palette: ThemePalette): string {
   const bg = palette.background;
