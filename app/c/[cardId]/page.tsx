@@ -1,6 +1,6 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { getCard } from "@/lib/db/cards";
+import { getCard, toPublicCard, toLockedCard } from "@/lib/db/cards";
 import { getThemeById } from "@/lib/themes/registry";
 import { getContributions } from "@/lib/db/contributions";
 import { ViewerLayout } from "@/components/viewer/ViewerLayout";
@@ -20,6 +20,16 @@ export async function generateMetadata({ params }: CardPageProps) {
 
     const theme = getThemeById(card.theme_id);
     if (!theme) return { title: "Card Preview | CelebrationCraft" };
+
+    // Never put a protected card's recipient/sender/title into metadata or its OG image,
+    // those tags are public and would defeat the passcode.
+    if (card.password_hash) {
+      return {
+        title: "Private Greeting Card | CelebrationCraft",
+        description: "This card is passcode protected. Enter the passcode to open it.",
+        robots: { index: false, follow: false },
+      };
+    }
 
     const titleTemplate = theme.seo.ogTitle || "A special greeting for {recipient}";
     const descTemplate = theme.seo.ogDescription || "Open this interactive card from {sender} to read their message.";
@@ -64,9 +74,12 @@ export default async function CardPage({ params }: CardPageProps) {
     return notFound();
   }
 
-  // Fetch initial group wishes if collaborative
+  const isLocked = !!card.password_hash;
+
+  // Fetch initial group wishes if collaborative. Skipped for locked cards, contributions are
+  // card content and must not ship to a viewer who hasn't entered the passcode.
   let initialContributions: Contribution[] = [];
-  if (card.is_collaborative) {
+  if (card.is_collaborative && !isLocked) {
     try {
       initialContributions = await getContributions(cardId);
     } catch (err) {
@@ -74,15 +87,14 @@ export default async function CardPage({ params }: CardPageProps) {
     }
   }
 
-  const sanitizedCard = {
-    ...card,
-    password_hash: card.password_hash ? "protected" : null,
-    collab_password: card.collab_password ? "protected" : null,
-  };
+  // A passcode-protected card ships as a content-free stub. The real config is served by
+  // /api/cards/[cardId]/verify-password only after the passcode is verified, otherwise the
+  // "gate" is purely cosmetic and anyone can read the card straight out of the RSC payload.
+  const cardForClient = isLocked ? toLockedCard(card) : toPublicCard(card);
 
   return (
     <ViewerLayout
-      card={sanitizedCard}
+      card={cardForClient}
       theme={theme}
       initialContributions={initialContributions}
     />

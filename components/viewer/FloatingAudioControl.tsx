@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import clsx from "clsx";
 
 interface FloatingAudioControlProps {
@@ -39,7 +39,7 @@ export function FloatingAudioControl({
     }
   }, []);
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (_event: unknown, info: PanInfo) => {
     const newPos = {
       x: position.x + info.offset.x,
       y: position.y + info.offset.y,

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, type PanInfo } from "framer-motion";
 import clsx from "clsx";
 
 export interface ToastProps {
@@ -30,7 +30,7 @@ export function Toast({
   }, [onClose, duration]);
 
   // Swipe gesture handler
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (_event: unknown, info: PanInfo) => {
     if (info.offset.x > 100) {
       onClose();
     }

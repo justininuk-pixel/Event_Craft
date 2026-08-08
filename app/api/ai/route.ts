@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isIP } from "node:net";
 import dns from "node:dns/promises";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
+import { getClientIp } from "@/lib/utils/request";
 
 // Static mapping of hosted provider endpoints, client-supplied baseUrl is ignored for hosted providers
 const HOSTED_ENDPOINTS: Record<string, string> = {
@@ -74,15 +75,34 @@ function sanitizeErrorMessage(): string {
   return "AI request failed. Please check your provider settings and try again.";
 }
 
+/**
+ * Safely extracts the assistant text from a provider response.
+ *
+ * Provider payloads were previously indexed directly (`data.choices[0].message.content`), so a
+ * response in any other shape, an error envelope, a content filter, a model that returns no
+ * choices, threw a TypeError that surfaced as an opaque 500.
+ */
+function pickText(value: unknown): string {
+  if (typeof value === "string") return value;
+  // Some OpenAI-compatible providers return content as an array of parts.
+  if (Array.isArray(value)) {
+    return value
+      .map((part) =>
+        typeof part === "string"
+          ? part
+          : typeof (part as { text?: unknown })?.text === "string"
+            ? ((part as { text: string }).text)
+            : ""
+      )
+      .join("");
+  }
+  return "";
+}
+
 export async function POST(req: NextRequest) {
   let providerName = "unknown";
 
-  // Rate limiting check: Only trust X-Forwarded-For if running behind a trusted reverse proxy (Vercel/Cloudflare) or TRUSTED_PROXY=true
-  const trustProxy = process.env.TRUSTED_PROXY === "true" || process.env.VERCEL === "1";
-  const forwarded = req.headers.get("x-forwarded-for");
-  const clientIp = trustProxy && forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
-  
-  const limitResult = await checkRateLimit(clientIp, {
+  const limitResult = await checkRateLimit(getClientIp(req), {
     endpoint: "api_ai",
     windowMs: 60 * 1000,
     maxRequests: 10,
@@ -131,7 +151,13 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       endpoint = provider === "ollama" ? `${safeOrigin}/api/chat` : `${safeOrigin}/v1/chat/completions`;
     } else if (HOSTED_ENDPOINTS[provider]) {
       if (provider === "gemini") {
-        endpoint = `${HOSTED_ENDPOINTS.gemini}/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        // The model name goes into the path, so it must not be able to escape it (a value like
+        // "../../foo" would rewrite the URL). The key is sent as a header, not a query
+        // parameter, so it can't leak into proxy logs or error reports.
+        if (!/^[A-Za-z0-9._-]+$/.test(model)) {
+          return NextResponse.json({ error: "Invalid model name" }, { status: 400 });
+        }
+        endpoint = `${HOSTED_ENDPOINTS.gemini}/v1beta/models/${model}:generateContent`;
       } else {
         endpoint = HOSTED_ENDPOINTS[provider];
       }
@@ -168,7 +194,7 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       }
 
       const data = await res.json();
-      resultText = data.choices[0].message.content;
+      resultText = pickText(data?.choices?.[0]?.message?.content);
     } else if (provider === "anthropic") {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -193,11 +219,11 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       }
 
       const data = await res.json();
-      resultText = data.content[0].text;
+      resultText = pickText(data?.content?.[0]?.text);
     } else if (provider === "gemini") {
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": String(apiKey ?? "") },
         redirect: "error",
         body: JSON.stringify({
           system_instruction: {
@@ -217,7 +243,7 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       }
 
       const data = await res.json();
-      resultText = data.candidates[0].content.parts[0].text;
+      resultText = pickText(data?.candidates?.[0]?.content?.parts?.[0]?.text);
     } else if (provider === "ollama") {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -238,7 +264,7 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       }
 
       const data = await res.json();
-      resultText = data.message.content;
+      resultText = pickText(data?.message?.content);
     } else if (provider === "cohere") {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -259,7 +285,16 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
       }
 
       const data = await res.json();
-      resultText = data.text;
+      resultText = pickText(data?.text);
+    }
+
+    // An empty result means the provider answered but we found no usable text, report that
+    // rather than returning a successful-looking empty string.
+    if (!resultText.trim()) {
+      return NextResponse.json(
+        { error: "The AI provider returned an empty response. Try again or use a different model." },
+        { status: 502 }
+      );
     }
 
     if (mode === "personalize") {
@@ -284,7 +319,7 @@ Keep the message concise, heartfelt, and perfectly suited for the occasion. Do n
 
     return NextResponse.json({ text: resultText });
   } catch (err: unknown) {
-    console.error("AI Generation Endpoint Error:", providerName);
+    console.error("AI Generation Endpoint Error:", providerName, err);
     return NextResponse.json({ error: sanitizeErrorMessage() }, { status: 500 });
   }
 }

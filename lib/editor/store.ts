@@ -2,6 +2,40 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { CardConfig } from "../themes/types";
 
+const HISTORY_LIMIT = 50;
+
+/**
+ * Structured deep clone, used for history snapshots.
+ *
+ * `JSON.parse(JSON.stringify(...))` was ~3x slower and silently mangled the config: `undefined`
+ * values were dropped and Dates/Maps degraded to strings/`{}`. structuredClone preserves them.
+ */
+function cloneConfig(config: CardConfig): CardConfig {
+  if (typeof structuredClone === "function") {
+    try {
+      return structuredClone(config);
+    } catch {
+      // Non-cloneable value (e.g. a function slipped into config), fall through.
+    }
+  }
+  return JSON.parse(JSON.stringify(config)) as CardConfig;
+}
+
+/** Truncates any redo branch, appends the current config, and caps the stack. */
+function pushHistory(state: { config: CardConfig; history: CardConfig[]; historyIndex: number }) {
+  const newHistory = state.history.slice(0, state.historyIndex + 1);
+  newHistory.push(cloneConfig(state.config));
+
+  // Trim from the front until we're inside the cap. The previous single `shift()` only ever
+  // dropped one entry, which is correct here but breaks if the cap is ever lowered.
+  while (newHistory.length > HISTORY_LIMIT) {
+    newHistory.shift();
+  }
+
+  state.history = newHistory;
+  state.historyIndex = newHistory.length - 1;
+}
+
 interface EditorState {
   config: CardConfig;
   history: CardConfig[];
@@ -76,32 +110,13 @@ export const useEditorStore = create<EditorState & EditorActions>()(
 
         if (skipHistory) return;
 
-        // Manage history
-        const newHistory = state.history.slice(0, state.historyIndex + 1);
-        newHistory.push(JSON.parse(JSON.stringify(state.config)));
-
-        // Cap history at 50 steps
-        if (newHistory.length > 50) {
-          newHistory.shift();
-        }
-
-        state.history = newHistory;
-        state.historyIndex = newHistory.length - 1;
+        pushHistory(state);
       });
     },
 
     commitHistory: () => {
       set((state) => {
-        // Manage history explicitly
-        const newHistory = state.history.slice(0, state.historyIndex + 1);
-        newHistory.push(JSON.parse(JSON.stringify(state.config)));
-
-        if (newHistory.length > 50) {
-          newHistory.shift();
-        }
-
-        state.history = newHistory;
-        state.historyIndex = newHistory.length - 1;
+        pushHistory(state);
       });
     },
 
@@ -109,7 +124,7 @@ export const useEditorStore = create<EditorState & EditorActions>()(
       set((state) => {
         if (state.historyIndex > 0) {
           state.historyIndex -= 1;
-          state.config = JSON.parse(JSON.stringify(state.history[state.historyIndex]));
+          state.config = cloneConfig(state.history[state.historyIndex]);
         }
       });
     },
@@ -118,7 +133,7 @@ export const useEditorStore = create<EditorState & EditorActions>()(
       set((state) => {
         if (state.historyIndex < state.history.length - 1) {
           state.historyIndex += 1;
-          state.config = JSON.parse(JSON.stringify(state.history[state.historyIndex]));
+          state.config = cloneConfig(state.history[state.historyIndex]);
         }
       });
     },
@@ -134,25 +149,36 @@ export const useEditorStore = create<EditorState & EditorActions>()(
 
     saveDraft: (themeId) => {
       const { config } = get();
-      if (typeof window !== "undefined") {
+      if (typeof window === "undefined") return;
+      try {
         localStorage.setItem(`draft-${themeId}`, JSON.stringify(config));
+      } catch (e) {
+        // QuotaExceededError (large base64 media in the config) used to throw straight out of
+        // the autosave path and surface as an unhandled error in the editor.
+        console.warn("Could not save draft, storage unavailable or full", e);
       }
     },
 
     restoreDraft: (themeId) => {
       if (typeof window === "undefined") return false;
-      const draft = localStorage.getItem(`draft-${themeId}`);
-      if (draft) {
-        try {
-          const parsed = JSON.parse(draft);
-          get().setConfig(parsed);
-          return true;
-        } catch (e) {
-          console.error("Failed to parse draft", e);
+      try {
+        const draft = localStorage.getItem(`draft-${themeId}`);
+        if (!draft) return false;
+
+        const parsed = JSON.parse(draft);
+        // Guard against a corrupted or hand-edited draft: setConfig() would otherwise install
+        // a non-object as the editor config and every consumer of config.palette would throw.
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) || !parsed.palette) {
+          console.warn("Ignoring malformed draft for", themeId);
           return false;
         }
+
+        get().setConfig(parsed as CardConfig);
+        return true;
+      } catch (e) {
+        console.error("Failed to restore draft", e);
+        return false;
       }
-      return false;
     },
 
     setActiveTab: (tab) => {

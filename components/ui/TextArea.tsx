@@ -59,11 +59,11 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     // Keep internal and external ref synced
     const setCombinedRef = (node: HTMLTextAreaElement | null) => {
-      (localRef as any).current = node;
+      (localRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
       if (typeof ref === "function") {
         ref(node);
       } else if (ref) {
-        (ref as any).current = node;
+        (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
       }
     };
 

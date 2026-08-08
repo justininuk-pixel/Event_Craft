@@ -29,6 +29,19 @@ export async function addContribution(
   return data as Contribution;
 }
 
+/** Number of contributions on a card, used to enforce the creator's max_contributors cap. */
+export async function countContributions(cardId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from("contributions")
+    .select("id", { count: "exact", head: true })
+    .eq("card_id", cardId);
+
+  if (error) {
+    throw new Error(`Failed to count contributions: ${error.message}`);
+  }
+  return count ?? 0;
+}
+
 export async function deleteContribution(cardId: string, id: string): Promise<void> {
   const { error } = await supabase
     .from("contributions")

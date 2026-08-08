@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listStorageFiles, deleteStorageFile } from "@/lib/db/storage";
+import { listStorageFiles, deleteStorageFile, sanitizePathSegment } from "@/lib/db/storage";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const rawUserId = searchParams.get("userId");
 
-    if (!userId) {
+    if (!rawUserId) {
       return NextResponse.json({ error: "Missing userId parameter" }, { status: 400 });
+    }
+
+    // Sanitised so a crafted id can't traverse out of the per-user prefix and enumerate the
+    // whole bucket (e.g. userId="..").
+    const userId = sanitizePathSegment(rawUserId, "");
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid userId parameter" }, { status: 400 });
     }
 
     const { files: photoFiles } = await listStorageFiles("card-media", `photos/${userId}`);
@@ -28,16 +35,25 @@ export async function GET(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const rawUserId = searchParams.get("userId");
     const name = searchParams.get("name");
     const type = searchParams.get("type"); // photo | voice
 
-    if (!userId || !name || !type) {
+    if (!rawUserId || !name || !type) {
       return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
+    }
+
+    if (type !== "photo" && type !== "voice") {
+      return NextResponse.json({ error: "Invalid type parameter" }, { status: 400 });
     }
 
     if (name.includes("..") || name.includes("/") || name.includes("\\")) {
       return NextResponse.json({ error: "Invalid file name" }, { status: 400 });
+    }
+
+    const userId = sanitizePathSegment(rawUserId, "");
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid userId parameter" }, { status: 400 });
     }
 
     const folder = type === "photo" ? "photos" : "voice";

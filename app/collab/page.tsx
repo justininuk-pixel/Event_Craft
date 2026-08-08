@@ -9,6 +9,7 @@ import { useMyCollabs } from "@/lib/hooks/useSupabaseData";
 import { useThemeSummaries } from "@/lib/themes/client";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { supabase } from "@/lib/db/client";
+import { authFetch } from "@/lib/utils/authFetch";
 import { useToast } from "@/components/ui/ToastQueue";
 import { useUserId } from "@/lib/hooks/useUserId";
 import { Modal } from "@/components/ui/Modal";
@@ -131,7 +132,7 @@ export default function CollabPage() {
   const executeMockUpgrade = async () => {
     if (userId?.startsWith("anon_")) return;
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await authFetch("/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, is_pro: true }),

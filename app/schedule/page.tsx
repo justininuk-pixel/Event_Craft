@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useMyCalendarEvents } from "@/lib/hooks/useSupabaseData";
 import { AddEventModal } from "@/components/schedule/AddEventModal";
 import { supabase } from "@/lib/db/client";
+import { authFetch } from "@/lib/utils/authFetch";
 import { useToast } from "@/components/ui/ToastQueue";
 import { useUserId } from "@/lib/hooks/useUserId";
 import { Modal } from "@/components/ui/Modal";
@@ -112,7 +113,9 @@ export default function SchedulePage() {
     try {
       if (deleteTarget.isGlobal) {
         const cleanId = deleteTarget.id.replace("global-", "");
-        const res = await fetch(`/api/admin/global-events?userId=${userId}&id=${cleanId}`, { method: "DELETE" });
+        const res = await authFetch(`/api/admin/global-events?id=${encodeURIComponent(cleanId)}`, {
+          method: "DELETE",
+        });
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.error || "Failed to delete global holiday");
@@ -147,7 +150,7 @@ export default function SchedulePage() {
         day: globalMode === "fixed" ? Number(globalDay) : null,
         rule: globalMode === "rule" ? globalRule : null
       };
-      const res = await fetch(`/api/admin/global-events?userId=${userId}`, {
+      const res = await authFetch(`/api/admin/global-events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

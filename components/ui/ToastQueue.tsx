@@ -65,15 +65,23 @@ export function ToastQueue() {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== "undefined") {
-      window.alert = (message) => {
-        useToastStore.getState().addToast({
-          message: String(message),
-          type: "warning",
-          duration: 5000,
-        });
-      };
-    }
+    if (typeof window === "undefined") return;
+
+    // Route stray alert() calls into the toast UI. The original replaced window.alert without
+    // ever restoring it, so unmounting (or a Fast Refresh cycle) left the page permanently
+    // patched and could stack patches on top of each other.
+    const originalAlert = window.alert;
+    window.alert = (message?: unknown) => {
+      useToastStore.getState().addToast({
+        message: String(message),
+        type: "warning",
+        duration: 5000,
+      });
+    };
+
+    return () => {
+      window.alert = originalAlert;
+    };
   }, []);
 
   if (!mounted) return null;

@@ -28,9 +28,21 @@ interface ViewerLayoutProps {
   initialContributions: Contribution[];
 }
 
-export function ViewerLayout({ card, theme, initialContributions }: ViewerLayoutProps) {
+export function ViewerLayout({ card: initialCard, theme, initialContributions }: ViewerLayoutProps) {
   const toast = useToast();
-  const { contributions } = useRealtimeContributions(card.id, initialContributions);
+  // For passcode-protected cards the server sends a stub with no real content, the actual
+  // config only arrives from /verify-password once the passcode checks out. Holding the card
+  // in state lets us swap the stub for the unlocked card without a reload.
+  const [card, setCard] = useState<SavedCard>(initialCard);
+  // Passcode-protected cards don't poll or subscribe: the contributions endpoint refuses them
+  // and RLS excludes them from realtime, by design. Their list is seeded once from the
+  // /verify-password response instead, so it is correct but not live.
+  const isProtected = !!initialCard.password_hash;
+  const { contributions, setContributions } = useRealtimeContributions(
+    card.id,
+    initialContributions,
+    !isProtected
+  );
   // Phase States: password-gate -> countdown -> delivery -> card-reveal
   const [phase, setPhase] = useState<"password-gate" | "countdown" | "surprise" | "delivery" | "card-reveal">(() => {
     if (card.password_hash) {
@@ -42,18 +54,20 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
     return card.config.surpriseMode ? "surprise" : "delivery";
   });
 
-  const [mounted, setMounted] = useState(false);
+  const surpriseMode = card.config.surpriseMode;
 
+  // Skip the delivery animation for a card this browser has already opened. localStorage is
+  // only readable after mount, so this can't be part of the initial phase state.
   useEffect(() => {
-    setMounted(true);
-    if (
-      !card.password_hash && 
-      (!card.scheduled_at || isCountdownComplete(card.scheduled_at))
-    ) {
-      const isSeen = localStorage.getItem(`seen-${card.id}`) === "true";
-      if (isSeen) {
+    if (card.password_hash) return;
+    if (card.scheduled_at && !isCountdownComplete(card.scheduled_at)) return;
+
+    try {
+      if (localStorage.getItem(`seen-${card.id}`) === "true") {
         setPhase("card-reveal");
       }
+    } catch {
+      /* storage unavailable (private mode), just play the delivery again */
     }
   }, [card.id, card.password_hash, card.scheduled_at]);
   const [passwordInput, setPasswordInput] = useState("");
@@ -104,19 +118,23 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
     };
   }, []);
 
-  // Check countdown status
-  const checkCountdownPhase = useCallback(() => {
-    if (card.scheduled_at && !isCountdownComplete(card.scheduled_at)) {
-      setPhase("countdown");
-    } else {
-      const isSeen = typeof window !== "undefined" && localStorage.getItem(`seen-${card.id}`) === "true";
-      if (isSeen) {
-        setPhase("card-reveal");
+  // Check countdown status. Takes the card explicitly so the unlock flow can pass the freshly
+  // fetched card, `card` state hasn't committed yet at that point.
+  const checkCountdownPhase = useCallback(
+    (activeCard: SavedCard = card) => {
+      if (activeCard.scheduled_at && !isCountdownComplete(activeCard.scheduled_at)) {
+        setPhase("countdown");
       } else {
-        setPhase(card.config.surpriseMode ? "surprise" : "delivery");
+        const isSeen = typeof window !== "undefined" && localStorage.getItem(`seen-${activeCard.id}`) === "true";
+        if (isSeen) {
+          setPhase("card-reveal");
+        } else {
+          setPhase(activeCard.config.surpriseMode ? "surprise" : "delivery");
+        }
       }
-    }
-  }, [card.id, card.scheduled_at]);
+    },
+    [card]
+  );
 
   // Timer polling for countdown page
   useEffect(() => {
@@ -131,13 +149,16 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
         if (isSeen) {
           setPhase("card-reveal");
         } else {
-          setPhase(card.config.surpriseMode ? "surprise" : "delivery");
+          setPhase(surpriseMode ? "surprise" : "delivery");
         }
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [phase, card.id, card.scheduled_at]);
+    // `surpriseMode` is read inside the interval callback, so it must be a dependency,
+    // otherwise the closure keeps whichever value was current when the countdown started
+    // (notably the locked stub's `undefined`, which forced "delivery" after an unlock).
+  }, [phase, card.id, card.scheduled_at, surpriseMode]);
 
   // Load Reactions Summary
   useEffect(() => {
@@ -172,9 +193,28 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
       });
       const data = await res.json();
 
-      if (res.ok && data.success) {
+      if (res.status === 429) {
+        // Server-side throttle hit, mirror it in the UI rather than showing "wrong passcode".
         setPasswordError(false);
-        checkCountdownPhase();
+        setLockedOut(true);
+        if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+        lockTimerRef.current = setTimeout(() => {
+          setLockedOut(false);
+          setPasswordAttempts(0);
+        }, APP_CONFIG.security.passwordLockoutMs);
+        return;
+      }
+
+      if (res.ok && data.success && data.card) {
+        setPasswordError(false);
+        // The unlocked card (with its real config) only exists after a correct passcode.
+        const unlockedCard = data.card as SavedCard;
+        setCard(unlockedCard);
+        setAudioVolume(unlockedCard.config.audioVolume ?? 0.5);
+        if (Array.isArray(data.contributions)) {
+          setContributions(data.contributions as Contribution[]);
+        }
+        checkCountdownPhase(unlockedCard);
       } else {
         setPasswordError(true);
         const nextAttempts = passwordAttempts + 1;
@@ -348,7 +388,14 @@ export function ViewerLayout({ card, theme, initialContributions }: ViewerLayout
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
                 className="text-center tracking-widest text-lg font-black"
-                error={passwordError && !lockedOut ? `Incorrect passcode. ${5 - passwordAttempts} attempts remaining.` : undefined}
+                error={
+                  passwordError && !lockedOut
+                    ? `Incorrect passcode. ${Math.max(
+                        0,
+                        APP_CONFIG.security.passwordMaxAttempts - passwordAttempts
+                      )} attempts remaining.`
+                    : undefined
+                }
               />
               
               <AnimatePresence>

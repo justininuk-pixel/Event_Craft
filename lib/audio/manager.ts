@@ -3,6 +3,8 @@ import { AudioPresetId } from "../themes/types";
 import { AUDIO_PRESETS } from "../themes/audio-presets";
 
 class AudioManager {
+  private static readonly SFX_CACHE_LIMIT = 24;
+
   private bgMusic: Howl | null = null;
   private currentPresetId: AudioPresetId = "none";
   private sfxCache: Record<string, Howl> = {};
@@ -122,8 +124,28 @@ class AudioManager {
         volume: this.sfxVolume,
       });
       this.sfxCache[path] = sfx;
+      this.evictSfxIfNeeded();
     }
     sfx.play();
+  }
+
+  /**
+   * The SFX cache is on a module-level singleton, so without eviction it grew for the whole
+   * session, one decoded Howl per distinct path. Themes reference many one-off sounds, so a
+   * long browsing session accumulated audio buffers that were never released.
+   */
+  private evictSfxIfNeeded() {
+    const paths = Object.keys(this.sfxCache);
+    if (paths.length <= AudioManager.SFX_CACHE_LIMIT) return;
+
+    for (const path of paths.slice(0, paths.length - AudioManager.SFX_CACHE_LIMIT)) {
+      try {
+        this.sfxCache[path]?.unload();
+      } catch {
+        /* already unloaded */
+      }
+      delete this.sfxCache[path];
+    }
   }
 
   public preloadSfx(paths: string[]) {

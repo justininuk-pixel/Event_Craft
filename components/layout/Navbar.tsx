@@ -9,6 +9,7 @@ import { CommandPalette } from "./CommandPalette";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { useUserId } from "@/lib/hooks/useUserId";
 import { supabase } from "@/lib/db/client";
+import { authFetch } from "@/lib/utils/authFetch";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -77,7 +78,7 @@ export function Navbar() {
 
   const fetchProfile = async (uid: string) => {
     try {
-      const res = await fetch(`/api/auth/profile?userId=${uid}`);
+      const res = await fetch(`/api/auth/profile?userId=${encodeURIComponent(uid)}`);
       if (res.ok) {
         const data = await res.json();
         setProfile(data);
@@ -119,8 +120,8 @@ export function Navbar() {
         setEmail("");
         setPassword("");
       }
-    } catch (err: any) {
-      setAuthError(err.message || "Authentication failed");
+    } catch (err: unknown) {
+      setAuthError(err instanceof Error ? err.message : "Authentication failed");
     } finally {
       setAuthLoading(false);
     }
@@ -131,7 +132,7 @@ export function Navbar() {
       await supabase.auth.signOut();
       toast.success("Signed out successfully!");
       setProfile(null);
-    } catch (err: any) {
+    } catch {
       toast.error("Sign out failed");
     }
   };
@@ -139,7 +140,7 @@ export function Navbar() {
   const toggleAdmin = async () => {
     if (!userId || userId.startsWith("anon_")) return;
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await authFetch("/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, is_admin: !profile?.is_admin }),
@@ -154,7 +155,7 @@ export function Navbar() {
         const err = await res.json();
         toast.error(err.error || "Failed to toggle admin role");
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to toggle admin role");
     }
   };
@@ -162,7 +163,7 @@ export function Navbar() {
   const togglePro = async () => {
     if (!userId || userId.startsWith("anon_")) return;
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await authFetch("/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, is_pro: !profile?.is_pro }),
@@ -175,7 +176,7 @@ export function Navbar() {
         const err = await res.json();
         toast.error(err.error || "Failed to toggle pro role");
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to toggle pro role");
     }
   };

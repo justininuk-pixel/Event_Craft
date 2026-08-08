@@ -21,6 +21,7 @@ import { Select } from "@/components/ui/Select";
 import { Slider } from "@/components/ui/Slider";
 import { Toggle } from "@/components/ui/Toggle";
 import { useUserId } from "@/lib/hooks/useUserId";
+import { authFetch } from "@/lib/utils/authFetch";
 import { useToast } from "@/components/ui/ToastQueue";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
@@ -133,7 +134,7 @@ export function EditorSidebar({ theme }: EditorSidebarProps) {
   const executeMockUpgrade = async () => {
     if (userId?.startsWith("anon_")) return;
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await authFetch("/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, is_pro: true }),

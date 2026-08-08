@@ -113,6 +113,21 @@ export const CardConfigSchema = z.object({
   dynamicTime: z.boolean().optional(),
 });
 
+/**
+ * Treats "" / whitespace / undefined as "not provided".
+ *
+ * The editor initialises `password`, `collabPassword` and `scheduledAt` to empty strings and
+ * sends them verbatim, so a plain `.min(4)` on `password` would reject every card published
+ * WITHOUT a passcode. Normalising to null first keeps the "no passcode" case valid while still
+ * enforcing the minimum length on a real one.
+ */
+function emptyToNull<T extends z.ZodType<string>>(schema: T) {
+  return z.preprocess(
+    (v) => (typeof v === "string" && v.trim() === "" ? null : v),
+    schema.nullish()
+  );
+}
+
 // Create Card Request Validation
 export const CreateCardSchema = z.object({
   themeId: z.string().min(1, "Theme ID is required"),
@@ -120,10 +135,12 @@ export const CreateCardSchema = z.object({
   deliveryStyle: z.string().default("envelope"),
   audioPreset: z.string().default("none"),
   isCollaborative: z.boolean().default(false),
-  maxContributors: z.number().int().min(1).max(100).nullable().default(10),
-  collabPassword: z.string().max(100).optional().nullable(),
-  scheduledAt: z.string().nullable().optional(),
-  password: z.string().min(4, "Password must be at least 4 characters").max(100).optional().nullable(),
+  // The editor sends "" (not null) for maxContributors when the field is untouched, and the
+  // value arrives as a string from number inputs, so coerce before validating.
+  maxContributors: z.coerce.number().int().min(1).max(100).nullable().default(10),
+  collabPassword: emptyToNull(z.string().max(100)),
+  scheduledAt: emptyToNull(z.string()),
+  password: emptyToNull(z.string().min(4, "Password must be at least 4 characters").max(100)),
   hasRsvp: z.boolean().default(false),
 });
 

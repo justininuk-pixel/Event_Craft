@@ -9,11 +9,18 @@ import { Contribution } from "@/lib/themes/types";
  * subscribes to Supabase Realtime for instant inserts/deletes, and polls every
  * 12s as a fallback (covers the window before the realtime migration is applied).
  */
-export function useRealtimeContributions(cardId: string | undefined, initial: Contribution[] = []) {
+export function useRealtimeContributions(
+  cardId: string | undefined,
+  initial: Contribution[] = [],
+  // Passcode-protected cards must not poll: the contributions endpoint (correctly) refuses
+  // them, and the unlocked list is handed to us by /verify-password instead. Without this the
+  // 12s poll would 403 forever and the live subscription would never yield anything.
+  enabled: boolean = true
+) {
   const [contributions, setContributions] = useState<Contribution[]>(initial);
 
   const refetch = useCallback(async () => {
-    if (!cardId) return;
+    if (!cardId || !enabled) return;
     try {
       const res = await fetch(`/api/cards/${cardId}/contributions`);
       if (res.ok) {
@@ -23,10 +30,10 @@ export function useRealtimeContributions(cardId: string | undefined, initial: Co
     } catch {
       /* ignore transient fetch errors */
     }
-  }, [cardId]);
+  }, [cardId, enabled]);
 
   useEffect(() => {
-    if (!cardId) return;
+    if (!cardId || !enabled) return;
 
     const channel = supabase
       .channel(`contributions-${cardId}`)
@@ -56,7 +63,7 @@ export function useRealtimeContributions(cardId: string | undefined, initial: Co
       supabase.removeChannel(channel);
       clearInterval(poll);
     };
-  }, [cardId, refetch]);
+  }, [cardId, enabled, refetch]);
 
   return { contributions, setContributions, refetch };
 }

@@ -146,7 +146,7 @@ export function BottomSheet({
     full: { y: "0vh" },
   };
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (_event: unknown, info: PanInfo) => {
     const threshold = 150;
     const velocityThreshold = 500; // Momentum swipe close
     

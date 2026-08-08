@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCard, incrementViews } from "../../../../lib/db/cards";
+import { getCard, incrementViews, toPublicCard, toLockedCard } from "../../../../lib/db/cards";
 import { supabase } from "../../../../lib/db/client";
+import { isAdminRequest, timingSafeEqual } from "../../../../lib/utils/auth";
 
 interface RouteParams {
   params: Promise<{ cardId: string }>;
@@ -13,15 +14,16 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     if (!card) {
       return NextResponse.json({ error: "Card not found" }, { status: 404 });
     }
-    const sanitizedCard = {
-      ...card,
-      password_hash: card.password_hash ? "protected" : null,
-      collab_password: card.collab_password ? "protected" : null,
-    };
-    return NextResponse.json({ card: sanitizedCard });
+
+    // Passcode-protected cards expose only a stub here. The real content is served by
+    // /verify-password after the passcode checks out, otherwise this endpoint is an
+    // unauthenticated way around the gate.
+    const payload = card.password_hash ? toLockedCard(card) : toPublicCard(card);
+
+    return NextResponse.json({ card: payload });
   } catch (err) {
-    const errMsg = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("API GET card error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
@@ -31,8 +33,8 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
     await incrementViews(cardId);
     return NextResponse.json({ success: true });
   } catch (err) {
-    const errMsg = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("API PATCH card error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
@@ -54,45 +56,38 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     let isAuthorized = false;
 
-    // Check 1: creator secret match
-    if (secret && card.creator_secret === secret) {
+    // Check 1: creator secret match, compared in constant time so response timing can't be
+    // used to recover the secret.
+    if (secret && card.creator_secret && timingSafeEqual(card.creator_secret, secret)) {
       isAuthorized = true;
     }
 
-    // Check 2: userId match
-    if (!isAuthorized && userId && card.user_id === userId) {
+    // Check 2: owner match.
+    if (!isAuthorized && userId && card.user_id && card.user_id === userId) {
       isAuthorized = true;
     }
 
-    // Check 3: admin check
-    if (!isAuthorized && userId) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("is_admin")
-        .eq("id", userId)
-        .maybeSingle();
-      if (profile && profile.is_admin) {
-        isAuthorized = true;
-      }
+    // Check 3: admin. Previously an unauthenticated `?userId=<any admin id>` was enough to
+    // delete any card, since is_admin was looked up from an id supplied in the query string.
+    // Admin deletion now requires a verified Supabase access token.
+    if (!isAuthorized) {
+      isAuthorized = await isAdminRequest(req);
     }
 
     if (!isAuthorized) {
       return NextResponse.json({ error: "Unauthorized to delete this card" }, { status: 403 });
     }
 
-    const { error } = await supabase
-      .from("cards")
-      .delete()
-      .eq("id", cardId);
+    const { error } = await supabase.from("cards").delete().eq("id", cardId);
 
     if (error) {
       console.error("Error deleting card:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ error: "Failed to delete card" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    const errMsg = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("API DELETE card error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

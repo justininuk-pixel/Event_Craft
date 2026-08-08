@@ -1,6 +1,67 @@
 import { supabase } from "./client";
 import { SavedCard, CardConfig } from "../themes/types";
 
+/**
+ * Strip every creator-only / private field before a card row is sent to a browser.
+ *
+ * `creator_secret` is the bearer credential for deleting the card, reading its analytics
+ * dashboard and moderating contributions, and `creator_ip_hash` holds the creator's IP.
+ * Both come back from `select("*")`, so any route that spreads a card row into a response
+ * (or into an RSC payload) leaks them to every recipient of a public card link unless this
+ * is applied first.
+ */
+export function toPublicCard(card: SavedCard): SavedCard {
+  const rest = { ...card } as SavedCard & Record<string, unknown>;
+  delete rest.creator_secret;
+  // creator_ip_hash is not on the SavedCard type but is present on the row from select("*").
+  delete rest.creator_ip_hash;
+
+  return {
+    ...(rest as SavedCard),
+    // Signal that a gate exists without revealing the bcrypt hash itself.
+    password_hash: card.password_hash ? "protected" : null,
+    collab_password: card.collab_password ? "protected" : null,
+  };
+}
+
+/**
+ * A content-free stub for a passcode-protected card: enough for the viewer to render the
+ * passcode gate, and nothing an unauthenticated visitor could read the card from.
+ */
+export function toLockedCard(card: SavedCard): SavedCard {
+  const publicCard = toPublicCard(card);
+
+  return {
+    ...publicCard,
+    theme_id: card.theme_id,
+    config: {
+      // Neutral placeholders, the gate UI itself reads none of these.
+      title: "",
+      subtitle: "",
+      body: "",
+      recipient: "",
+      sender: "",
+      palette: {
+        primary: "#6366f1",
+        secondary: "#8b5cf6",
+        accent: "#ec4899",
+        background: "#0b0b12",
+        text: "#ffffff",
+        textSecondary: "#a1a1aa",
+      },
+      fontHeading: "",
+      fontBody: "",
+      animationSpeed: "normal",
+      animationsEnabled: true,
+      stickers: [],
+      deliveryStyle: card.delivery_style,
+      audioPreset: "none",
+      audioVolume: 0.5,
+      audioAutoplay: false,
+    } as unknown as CardConfig,
+  };
+}
+
 export async function createCard(
   id: string,
   themeId: string,

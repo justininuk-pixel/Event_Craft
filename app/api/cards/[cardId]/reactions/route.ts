@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addReaction, getReactions, getReactionSummary } from "@/lib/db/reactions";
+import { ReactionSchema } from "@/lib/db/schemas";
+import { sanitizeText } from "@/lib/utils/validation";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
+import { getClientIp } from "@/lib/utils/request";
 
 interface RouteParams {
   params: Promise<{ cardId: string }>;
@@ -22,10 +25,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
 export async function POST(req: NextRequest, { params }: RouteParams) {
   try {
-    const forwardHeader = req.headers.get("x-forwarded-for");
-    const ip = forwardHeader ? forwardHeader.split(",")[0] : "127.0.0.1";
-
-    const rateCheck = await checkRateLimit(ip, {
+    const rateCheck = await checkRateLimit(getClientIp(req), {
       endpoint: "POST /api/reactions",
       windowMs: 60_000,
       maxRequests: 20,
@@ -38,17 +38,32 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     }
 
     const { cardId } = await params;
-    const body = await req.json();
-    const { emoji, message, displayName } = body;
-
-    if (!emoji) {
-      return NextResponse.json({ error: "Emoji is required" }, { status: 400 });
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const reaction = await addReaction(cardId, emoji, message, displayName);
+    // ReactionSchema already existed but was never applied, so emoji/message/displayName were
+    // stored with no length bound at all.
+    const parsed = ReactionSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join(", ") },
+        { status: 400 }
+      );
+    }
+
+    const { emoji, message, displayName } = parsed.data;
+
+    const reaction = await addReaction(
+      cardId,
+      sanitizeText(emoji, 16),
+      message ? sanitizeText(message, 500) : null,
+      displayName ? sanitizeText(displayName, 50) : null
+    );
     return NextResponse.json({ reaction }, { status: 201 });
   } catch (err) {
-    const errMsg = err instanceof Error ? err.message : "Server error";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("API reactions POST error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

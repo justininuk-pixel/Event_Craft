@@ -10,22 +10,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Missing userId parameter" }, { status: 400 });
     }
 
-    // 1. Fetch user's cards to get views, shares, and IDs
-    let cardsQuery = supabase
+    // 1. Fetch user's cards to get views, shares, and IDs.
+    // `.eq()` is parameterised. The old development branch interpolated userId into a
+    // PostgREST `.or()` filter string, which a crafted id can rewrite.
+    const cardsQuery = supabase
       .from("cards")
-      .select("id, view_count, shares");
-
-    if (process.env.NODE_ENV === "development") {
-      cardsQuery = cardsQuery.or(`user_id.eq.${userId},user_id.is.null`);
-    } else {
-      cardsQuery = cardsQuery.eq("user_id", userId);
-    }
+      .select("id, view_count, shares")
+      .eq("user_id", userId);
 
     const { data: cards, error: cardsErr } = await cardsQuery;
 
     if (cardsErr) {
       console.error("Database query cards error in analytics:", cardsErr);
-      return NextResponse.json({ error: cardsErr.message }, { status: 500 });
+      return NextResponse.json({ error: "Failed to load analytics" }, { status: 500 });
     }
 
     const totalCards = cards?.length || 0;
@@ -36,16 +33,17 @@ export async function GET(req: NextRequest) {
     const cardIds = cards?.map((c) => c.id) || [];
 
     if (cardIds.length > 0) {
-      const { data: reactions, error: reactionsErr } = await supabase
+      // Count server-side instead of fetching every reaction row just to read `.length`.
+      const { count, error: reactionsErr } = await supabase
         .from("reactions")
-        .select("id")
+        .select("id", { count: "exact", head: true })
         .in("card_id", cardIds);
 
       if (reactionsErr) {
         console.error("Database query reactions error in analytics:", reactionsErr);
-        return NextResponse.json({ error: reactionsErr.message }, { status: 500 });
+        return NextResponse.json({ error: "Failed to load analytics" }, { status: 500 });
       }
-      totalReactions = reactions?.length || 0;
+      totalReactions = count ?? 0;
     }
 
     return NextResponse.json({

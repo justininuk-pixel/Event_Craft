@@ -160,7 +160,10 @@ export function DashboardWidgets() {
               />
             ) : (
               reactions.slice(0, 4).map((reaction, i) => {
-                const cardTitle = reaction.cards?.config?.title || "Celebration Card";
+                // config is JSONB, so `title` is genuinely unknown at the type level, coerce
+                // it rather than rendering a non-ReactNode value.
+                const rawTitle = reaction.cards?.config?.title;
+                const cardTitle = typeof rawTitle === "string" && rawTitle ? rawTitle : "Celebration Card";
                 return (
                   <div key={i} className="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-secondary/50 transition-colors cursor-pointer">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white text-sm font-bold shadow-sm shrink-0">
